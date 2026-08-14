@@ -22,7 +22,6 @@ function NavAnchor({
     );
   }
 
-
   return (
     <a href={href} {...rest}>
       {children}

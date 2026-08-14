@@ -22,7 +22,8 @@ export function FeaturedProjects() {
         {!hasRealProjects() ? (
           <p className="mt-8 rounded-xl border border-dashed border-border bg-surface/40 p-5 text-sm text-muted-foreground">
             Project content hasn&apos;t been added yet. The cards below show the real structure with
-            [ADD PROJECT] placeholders — fill them in <code className="font-mono">src/data/projects.ts</code>.
+            [ADD PROJECT] placeholders — fill them in{" "}
+            <code className="font-mono">src/data/projects.ts</code>.
           </p>
         ) : null}
 

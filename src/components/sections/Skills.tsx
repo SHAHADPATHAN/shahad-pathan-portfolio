@@ -6,7 +6,10 @@ import { skillGroups } from "@/data/skills";
 
 export function Skills() {
   return (
-    <section id="skills" className="scroll-mt-24 border-y border-border bg-surface/30 py-20 lg:py-28">
+    <section
+      id="skills"
+      className="scroll-mt-24 border-y border-border bg-surface/30 py-20 lg:py-28"
+    >
       <Container>
         <SectionHeading
           eyebrow="Tech stack"
