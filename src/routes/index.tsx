@@ -4,6 +4,9 @@ import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { CredibilityStrip } from "@/components/sections/CredibilityStrip";
 import { PhasePlaceholder } from "@/components/sections/PhasePlaceholder";
+import { About } from "@/components/sections/About";
+import { Skills } from "@/components/sections/Skills";
+import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
 import { profile } from "@/data/profile";
 
 export const Route = createFileRoute("/")({
@@ -45,20 +48,9 @@ function Home() {
         </h1>
         <Hero />
         <CredibilityStrip />
-        <PhasePlaceholder
-          id="about"
-          eyebrow="About"
-          title="A little about me"
-          description="Professional introduction, education, technical interests and current focus."
-          note="Coming in Phase 2 — About, Skills and Featured Projects."
-        />
-        <PhasePlaceholder
-          id="projects"
-          eyebrow="Work"
-          title="Featured projects"
-          description="Selected work with problem, solution, stack and outcomes."
-          note="No projects available yet. [ADD PROJECT] — project system arrives in Phase 2 and 3."
-        />
+        <About />
+        <Skills />
+        <FeaturedProjects />
         <PhasePlaceholder
           id="experience"
           eyebrow="Experience"

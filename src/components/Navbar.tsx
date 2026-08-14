@@ -1,10 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type AnchorHTMLAttributes } from "react";
 import { Menu, X, FileText, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui/container";
-import { navItems } from "@/data/navigation";
+import { navItems, isRouteHref } from "@/data/navigation";
 import { profile } from "@/data/profile";
 import { cn } from "@/lib/utils";
+
+/** Renders a router Link for real routes and a plain anchor for in-page hashes. */
+function NavAnchor({
+  href,
+  children,
+  ...rest
+}: { href: string } & AnchorHTMLAttributes<HTMLAnchorElement>) {
+  if (isRouteHref(href)) {
+    const { target: _target, ...linkProps } = rest;
+    return (
+      <Link to={href as "/"} {...linkProps}>
+        {children}
+      </Link>
+    );
+  }
+
+  return (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  );
+}
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -20,13 +43,13 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const ids = navItems.map((i) => i.href.replace("#", ""));
+    const ids = navItems.flatMap((i) => (i.sectionId ? [i.sectionId] : []));
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActive(`#${visible.target.id}`);
+        if (visible) setActive(visible.target.id);
       },
       { rootMargin: "-40% 0px -50% 0px", threshold: [0.05, 0.3, 0.6] },
     );
@@ -64,10 +87,10 @@ export function Navbar() {
         <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {navItems.map((item) => {
-              const isActive = active === item.href;
+              const isActive = item.sectionId ? active === item.sectionId : false;
               return (
                 <li key={item.href}>
-                  <a
+                  <NavAnchor
                     href={item.href}
                     aria-current={isActive ? "true" : undefined}
                     className={cn(
@@ -82,7 +105,7 @@ export function Navbar() {
                         className="absolute inset-x-3 -bottom-0.5 h-px bg-primary"
                       />
                     ) : null}
-                  </a>
+                  </NavAnchor>
                 </li>
               );
             })}
@@ -132,14 +155,14 @@ export function Navbar() {
           >
             <Container className="flex flex-col gap-1 py-5">
               {navItems.map((item) => (
-                <a
+                <NavAnchor
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
                   className="rounded-lg px-3 py-3 text-base text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
                 >
                   {item.label}
-                </a>
+                </NavAnchor>
               ))}
               <div className="mt-4 grid gap-3">
                 <a
