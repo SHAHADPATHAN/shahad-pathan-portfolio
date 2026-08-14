@@ -10,21 +10,23 @@ import { ProjectFilters, type FilterValue } from "@/components/projects/ProjectF
 import { projects, usedCategories, hasRealProjects } from "@/data/projects";
 import { profile } from "@/data/profile";
 
-const title = `Projects | ${profile.name}`;
-const description =
-  "AI, Data Science and web development projects built by Shahad Pathan — problem, stack and implementation.";
-
 export const Route = createFileRoute("/projects/")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const title = `Projects | ${profile.name}`;
+    const description =
+      "AI, Data Science and web development projects built by Shahad Pathan — problem, stack and implementation.";
+
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
   component: ProjectsPage,
 });
 

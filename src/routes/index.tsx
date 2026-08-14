@@ -27,24 +27,24 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const personSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: profile.name,
-  jobTitle: profile.role,
-  description: profile.seo.description,
-  url: profile.website,
-  email: profile.email,
-  telephone: profile.phone,
-  sameAs: [profile.github, profile.linkedin],
-  alumniOf: {
-    "@type": "EducationalOrganization",
-    name: profile.institution,
-  },
-  knowsAbout: ["Artificial Intelligence", "Data Science", "Machine Learning", "Python", "React", "TypeScript"],
-};
-
 function Home() {
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profile.name,
+    jobTitle: profile.role,
+    description: profile.seo.description,
+    url: profile.website,
+    email: profile.email,
+    telephone: profile.phone,
+    sameAs: [profile.github, profile.linkedin],
+    alumniOf: {
+      "@type": "EducationalOrganization",
+      name: profile.institution,
+    },
+    knowsAbout: ["Artificial Intelligence", "Data Science", "Machine Learning", "Python", "React", "TypeScript"],
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Sleek initial boot/loading entrance animation */}
