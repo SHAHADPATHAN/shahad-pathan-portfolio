@@ -6,9 +6,6 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { nitro } from "nitro/vite";
 
 export default defineConfig(({ command }) => {
-  const isVercel = Boolean(process.env.VERCEL);
-  const preset = process.env.NITRO_PRESET || (isVercel ? "vercel" : "vercel");
-
   return {
     plugins: [
       tailwindcss(),
@@ -16,7 +13,10 @@ export default defineConfig(({ command }) => {
       tanstackStart(),
       command === "build"
         ? nitro({
-            preset,
+            preset: "vercel",
+            vercel: {
+              runtime: "nodejs22.x",
+            },
           })
         : null,
       react(),
