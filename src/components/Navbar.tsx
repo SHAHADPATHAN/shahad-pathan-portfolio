@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type AnchorHTMLAttributes } from "react";
 import { Menu, X, FileText, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Link } from "@tanstack/react-router";
@@ -12,14 +12,15 @@ function NavAnchor({
   href,
   children,
   ...rest
-}: { href: string } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+}: { href: string } & AnchorHTMLAttributes<HTMLAnchorElement>) {
   if (isRouteHref(href)) {
     return (
-      <Link to={href} {...rest}>
+      <Link to={href as "/"} {...rest}>
         {children}
       </Link>
     );
   }
+
   return (
     <a href={href} {...rest}>
       {children}
