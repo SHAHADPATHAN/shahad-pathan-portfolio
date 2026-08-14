@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Container } from "@/components/ui/container";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { BrandLogo } from "@/components/BrandLogo";
 import { navItems, isRouteHref } from "@/data/navigation";
 import { profile } from "@/data/profile";
 import { cn } from "@/lib/utils";
@@ -123,9 +124,9 @@ export function Navbar() {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }
           }}
-          className="font-display text-sm font-bold tracking-[0.18em] uppercase text-foreground transition-opacity hover:opacity-80"
+          className="transition-opacity hover:opacity-95"
         >
-          Shahad<span className="text-primary">.</span>Pathan
+          <BrandLogo size="md" showStatus={true} showSubtitle={false} />
         </a>
 
         {/* Desktop Navigation */}

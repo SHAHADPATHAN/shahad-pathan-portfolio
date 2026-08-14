@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowUp, Sparkles, Terminal, Heart } from "lucide-react";
 import { Container } from "@/components/ui/container";
+import { BrandLogo } from "@/components/BrandLogo";
 import { SocialLinks } from "@/components/SocialLinks";
 import { profile } from "@/data/profile";
 import { navItems } from "@/data/navigation";
@@ -66,13 +67,9 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr_auto] lg:gap-16">
           {/* Column 1: Brand & Bio */}
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-display text-2xl font-bold tracking-[0.16em] uppercase text-foreground">
-                Shahad<span className="text-primary animate-pulse">.</span>Pathan
-              </span>
-            </div>
+            <BrandLogo size="lg" showStatus={false} showSubtitle={false} />
 
-            <p className="mt-3 max-w-md text-xs leading-relaxed text-muted-foreground sm:text-sm">
+            <p className="mt-4 max-w-md text-xs leading-relaxed text-muted-foreground sm:text-sm">
               Computer Engineering undergraduate (GTU &apos;28) focused on AI modeling, computer vision, data systems, and responsive web architecture.
             </p>
 
