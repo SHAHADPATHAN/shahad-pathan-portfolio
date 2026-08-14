@@ -13,9 +13,7 @@ export default defineConfig(({ command }) => {
     plugins: [
       tailwindcss(),
       tsconfigPaths({ projects: ["./tsconfig.json"] }),
-      tanstackStart({
-        server: { entry: "server" },
-      }),
+      tanstackStart(),
       command === "build"
         ? nitro({
             preset,
