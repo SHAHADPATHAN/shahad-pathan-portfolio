@@ -14,7 +14,7 @@ const title = `Projects | ${profile.name}`;
 const description =
   "AI, Data Science and web development projects built by Shahad Pathan — problem, stack and implementation.";
 
-export const Route = createFileRoute("/projects")({
+export const Route = createFileRoute("/projects/")({
   head: () => ({
     meta: [
       { title },
@@ -32,7 +32,7 @@ function ProjectsPage() {
   const categories = usedCategories();
   const [filter, setFilter] = useState<FilterValue>("All");
 
-  const showFilters = projects.length > 3 && categories.length > 1;
+  const showFilters = categories.length > 1;
   const visible =
     filter === "All" || !showFilters ? projects : projects.filter((p) => p.category === filter);
 

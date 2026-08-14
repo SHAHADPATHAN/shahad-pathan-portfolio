@@ -7,6 +7,7 @@
 /*
  * SHAHAD PATHAN — Design System
  * Dark-first premium developer aesthetic: black surfaces, orange accent, white text.
+ * Also supports crisp, modern Light Mode.
  * All colors are oklch tokens. Never hardcode colors in components.
  */
 
@@ -53,6 +54,7 @@
 :root {
   --radius: 0.75rem;
 
+  /* Default Dark Mode Theme */
   --background: oklch(0.145 0 0); /* #0A0A0A */
   --foreground: oklch(1 0 0);
   --surface: oklch(0.178 0 0); /* #111111 */
@@ -82,6 +84,38 @@
   --glow: oklch(0.672 0.221 42.5 / 0.28);
 }
 
+/* Light Mode Theme */
+html.light,
+.light {
+  --background: oklch(0.985 0.002 90); /* Clean #FAFAFA */
+  --foreground: oklch(0.145 0 0); /* Deep charcoal text */
+  --surface: oklch(0.955 0.005 90); /* Elevated light cards #F4F4F5 */
+  --surface-2: oklch(0.92 0.005 90); /* Secondary light surface */
+  --card: oklch(0.955 0.005 90);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(0.985 0.002 90);
+  --popover-foreground: oklch(0.145 0 0);
+
+  --primary: oklch(0.62 0.22 40); /* Vibrant Orange */
+  --primary-foreground: oklch(0.99 0 0);
+  --primary-bright: oklch(0.56 0.22 40);
+
+  --secondary: oklch(0.92 0.005 90);
+  --secondary-foreground: oklch(0.145 0 0);
+  --muted: oklch(0.92 0.005 90);
+  --muted-foreground: oklch(0.46 0.015 260); /* Readable dark slate */
+  --accent: oklch(0.90 0.005 90);
+  --accent-foreground: oklch(0.145 0 0);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0 0 0 / 0.09);
+  --border-strong: oklch(0 0 0 / 0.16);
+  --input: oklch(0 0 0 / 0.12);
+  --ring: oklch(0.62 0.22 40);
+  --glow: oklch(0.62 0.22 40 / 0.16);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -99,6 +133,7 @@
     font-family: var(--font-sans);
     font-feature-settings: "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   h1,
@@ -168,4 +203,25 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--color-primary-bright);
+}
+
+/* Infinite Marquee Animation for Tech Ticker */
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }

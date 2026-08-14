@@ -116,8 +116,6 @@ Motion for React / Framer Motion where appropriate
 
 Lucide icons
 
-If the current Lovable environment uses a slightly different compatible setup, preserve the existing environment instead of unnecessarily rebuilding the project.
-
 Use the minimum number of dependencies necessary.
 
 Do not add libraries simply because they look impressive.
@@ -1397,16 +1395,6 @@ MEMORABLE
 PROFESSIONAL
 
 AND EASY TO MAINTAIN.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/49d7ae8d-cd8b-44dd-9324-6a805c985500).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 

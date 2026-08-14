@@ -1,23 +1,48 @@
-import { Github, Linkedin, Mail, type LucideIcon } from "lucide-react";
+import { Github, Linkedin, Mail, Phone, Globe, type LucideIcon } from "lucide-react";
 
 export type SocialLink = {
   id: string;
   label: string;
-  /** Placeholder values starting with "[ADD" are treated as not-yet-supplied. */
   href: string;
   icon: LucideIcon;
 };
 
 export const socialLinks: SocialLink[] = [
-  { id: "github", label: "GitHub", href: "[ADD GITHUB URL]", icon: Github },
-  { id: "linkedin", label: "LinkedIn", href: "[ADD LINKEDIN URL]", icon: Linkedin },
-  { id: "email", label: "Email", href: "[ADD EMAIL]", icon: Mail },
+  {
+    id: "github",
+    label: "GitHub",
+    href: "https://github.com/SHAHADPATHAN",
+    icon: Github,
+  },
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/shahad-pathan/",
+    icon: Linkedin,
+  },
+  {
+    id: "portfolio",
+    label: "Website",
+    href: "https://shahadpathan.vercel.app",
+    icon: Globe,
+  },
+  {
+    id: "email",
+    label: "Email",
+    href: "mailto:sahadpathan2697@gmail.com",
+    icon: Mail,
+  },
+  {
+    id: "phone",
+    label: "Phone",
+    href: "tel:+919913031752",
+    icon: Phone,
+  },
 ];
 
 export const isPlaceholder = (value: string) => value.trim().startsWith("[ADD");
 
 export const resolveHref = (link: SocialLink) => {
   if (isPlaceholder(link.href)) return undefined;
-  if (link.id === "email") return `mailto:${link.href}`;
   return link.href;
 };

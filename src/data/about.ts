@@ -1,23 +1,22 @@
 /**
- * About + current focus content. Edit here — never inside components.
- * [ADD ...] values are honest placeholders awaiting real content.
+ * About + current focus content.
  */
 
 export const about = {
   eyebrow: "About",
   title: "A little about me",
-  lead: "I'm a Computer Engineering student who likes turning real problems into working software.",
+  lead: "I'm a Computer Engineering student @ GTU ('28) who builds intelligent, data-driven applications and modern web solutions.",
   paragraphs: [
-    "My background is Computer Engineering, and most of my time goes into two things: understanding data and building software people can actually use. That means writing Python for analysis and models, and building modern web interfaces on top of them.",
-    "I'm most interested in the overlap between AI, Data Science, Machine Learning and software engineering — where a model is only useful once it ships inside a clear, fast, well-engineered product.",
-    "Right now I'm focused on strengthening fundamentals while building projects end to end: problem framing, data, implementation, interface and iteration.",
+    "I am pursuing a Bachelor of Engineering in Computer Engineering at Gujarat Technological University (GTU), graduating in 2028. My primary technical focus sits at the intersection of Artificial Intelligence, Data Science, and full-stack software engineering.",
+    "Most of my work involves writing Python for machine learning models and data pipelines, building responsive web interfaces with React and TypeScript, and orchestrating robust backend APIs that serve real users.",
+    "I have shipped live tools such as Wriper AI (background removal suite) and Vidsnap AI (automated video intelligence), continuously exploring modern system architecture, data processing, and scalable deployments.",
   ],
   facts: [
-    { label: "Field", value: "Computer Engineering" },
-    { label: "Focus", value: "AI · Data · Software" },
-    { label: "Education", value: "[ADD DEGREE / INSTITUTION]" },
-    { label: "Location", value: "[ADD LOCATION]" },
-    { label: "Availability", value: "[ADD AVAILABILITY]" },
+    { label: "Degree", value: "B.E. Computer Engineering (2024 – 2028)" },
+    { label: "Institution", value: "Gujarat Technological University (GTU)" },
+    { label: "Location", value: "Mehsana, Gujarat, India" },
+    { label: "Focus", value: "AI · Data Science · Software" },
+    { label: "Status", value: "Open to Internships & Projects" },
   ],
 } as const;
 
@@ -28,24 +27,23 @@ export type FocusGroup = {
   items: string[];
 };
 
-/** Editable placeholders — replace with your verified current focus. */
 export const currentFocus: FocusGroup[] = [
   {
     id: "learning",
     title: "Currently learning",
-    description: "Fundamentals I'm actively deepening.",
-    items: ["Data Science", "Machine Learning", "DSA", "System Design"],
+    description: "Deepening theoretical and applied engineering fundamentals.",
+    items: ["Advanced Machine Learning", "Data Engineering Pipelines", "System Design", "Algorithms & Data Structures"],
   },
   {
     id: "building",
     title: "Currently building",
-    description: "The kind of work I'm shipping.",
-    items: ["AI-powered applications", "Data-driven projects", "Modern web applications"],
+    description: "Production-ready software and intelligence tools.",
+    items: ["AI-powered computer vision tools", "Full-stack React & TypeScript apps", "RESTful APIs with Python & FastAPI"],
   },
   {
     id: "exploring",
     title: "Currently exploring",
-    description: "Areas I'm reading about and experimenting with.",
-    items: ["Generative AI", "LLMs", "Data Engineering", "Cloud"],
+    description: "Emerging paradigms in AI and cloud architecture.",
+    items: ["Generative AI & LLMs", "Vector Databases", "Cloud Deployments & Docker", "Automated Security Audits"],
   },
 ];

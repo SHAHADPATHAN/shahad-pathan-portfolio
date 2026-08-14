@@ -2,6 +2,7 @@ import { ArrowRight, Download } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { Container } from "@/components/ui/container";
 import { AnimatedText } from "@/components/motion/AnimatedText";
+import { AntigravityCanvas } from "@/components/motion/AntigravityCanvas";
 import { HeroTerminal } from "@/components/HeroTerminal";
 import { SocialLinks } from "@/components/SocialLinks";
 import { profile } from "@/data/profile";
@@ -16,17 +17,25 @@ export function Hero() {
 
   return (
     <section id="top" className="relative overflow-hidden pt-32 pb-20 lg:pt-44 lg:pb-28">
+      {/* Interactive Antigravity Canvas Particle Simulation */}
+      <AntigravityCanvas />
+
+      {/* Grid Backdrop & Ambient Radial Nebulae */}
       <div aria-hidden="true" className="grid-backdrop absolute inset-0 -z-20 opacity-60" />
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-20 bg-[radial-gradient(70%_50%_at_50%_0%,transparent,var(--color-background)_75%)]"
+        className="absolute inset-0 -z-20 bg-[radial-gradient(70%_50%_at_50%_0%,transparent,var(--color-background)_80%)]"
       />
       <div
         aria-hidden="true"
-        className="absolute -top-40 left-1/4 -z-10 size-[520px] rounded-full bg-primary/8 blur-[120px]"
+        className="absolute -top-40 left-1/4 -z-10 size-[520px] rounded-full bg-primary/10 blur-[130px]"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute top-1/2 -right-20 -z-10 size-[420px] rounded-full bg-primary/6 blur-[110px]"
       />
 
-      <Container className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+      <Container className="relative z-10 grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
         <div>
           <motion.p {...fade(0.05)} className="eyebrow">
             {profile.eyebrow}
