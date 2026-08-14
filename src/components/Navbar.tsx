@@ -14,12 +14,14 @@ function NavAnchor({
   ...rest
 }: { href: string } & AnchorHTMLAttributes<HTMLAnchorElement>) {
   if (isRouteHref(href)) {
+    const { target: _target, ...linkProps } = rest;
     return (
-      <Link to={href as "/"} {...rest}>
+      <Link to={href as "/"} {...linkProps}>
         {children}
       </Link>
     );
   }
+
 
   return (
     <a href={href} {...rest}>
