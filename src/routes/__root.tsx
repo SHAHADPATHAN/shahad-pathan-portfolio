@@ -75,13 +75,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Shahad Pathan | Computer Engineer | AI & Data Science" },
+      { title: "Shahad Pathan" },
       {
         name: "description",
         content:
           "Shahad Pathan is a Computer Engineering student building AI, Data Science and modern software solutions.",
       },
       { name: "author", content: "Shahad Pathan" },
+      { property: "og:title", content: "Shahad Pathan" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -96,7 +97,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "alternate icon", href: "/favicon.svg" },
     ],
   }),
 

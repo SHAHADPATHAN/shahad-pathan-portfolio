@@ -28,7 +28,7 @@ export const profile = {
   resumePath: "/resume/shahad-pathan-resume.pdf",
   resumeAvailable: false,
   seo: {
-    title: "Shahad Pathan | Computer Engineer | AI & Data Science",
+    title: "Shahad Pathan",
     description:
       "Shahad Pathan is a Computer Engineering student @ GTU (Class of 2028) building AI, Data Science and modern software solutions.",
   },

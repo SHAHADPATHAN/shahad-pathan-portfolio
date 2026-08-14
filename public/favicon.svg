@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b00"/>
+      <stop offset="100%" stop-color="#ff3b00"/>
+    </linearGradient>
+  </defs>
+  <!-- Background squircle with neon border -->
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" fill="none" stroke="url(#brand)" stroke-width="2.5" stroke-opacity="0.85"/>
+  <!-- Stylized SP Monogram -->
+  <text x="31" y="43" font-family="'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="29" fill="#ffffff" text-anchor="middle" letter-spacing="-1.5">
+    S<tspan fill="url(#brand)">P</tspan>
+  </text>
+  <!-- Energetic dot -->
+  <circle cx="48" cy="44" r="3" fill="#ff6b00"/>
+</svg>
