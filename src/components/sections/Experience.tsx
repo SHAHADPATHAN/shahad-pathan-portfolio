@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/sections/SectionHeading";
@@ -35,16 +34,9 @@ function JourneyCard({ item }: { item: ExperienceItem }) {
           </div>
 
           <div className="flex flex-wrap items-center justify-end gap-1.5">
-            {isEducation ? (
-              <span className="inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-primary-bright uppercase tracking-wider">
-                <Sparkles className="size-3" />
-                GTU &apos;28
-              </span>
-            ) : (
-              <span className="rounded-full border border-border bg-surface px-2.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
-                {item.badgeLabel ?? "Internship"}
-              </span>
-            )}
+            <span className="rounded-full border border-border bg-surface px-2.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+              {item.badgeLabel ?? (isEducation ? "Education" : "Internship")}
+            </span>
           </div>
         </div>
 

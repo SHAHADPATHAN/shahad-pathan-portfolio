@@ -14,9 +14,6 @@ export default defineConfig(({ command }) => {
       command === "build"
         ? nitro({
             preset: "vercel",
-            vercel: {
-              runtime: "nodejs22.x",
-            },
           })
         : null,
       react(),

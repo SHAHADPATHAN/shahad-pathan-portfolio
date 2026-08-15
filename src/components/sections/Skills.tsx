@@ -186,7 +186,7 @@ function SkillGroupCard({
         <span className="inline-flex items-center gap-1 text-primary-bright">
           <Sparkles className="size-3" /> Click tool to inspect
         </span>
-        <span>GTU &apos;28 Stack</span>
+        <span>Core Stack</span>
       </div>
     </article>
   );
@@ -195,7 +195,7 @@ function SkillGroupCard({
 export function Skills() {
   const [activeCategory, setActiveCategory] = useState<SkillCategory>("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSkill, setSelectedSkill] = useState<Skill>(allSkillsList[0]);
+  const [selectedSkill, setSelectedSkill] = useState<Skill>(allSkillsList[0]!);
   const [autoScroll, setAutoScroll] = useState(true);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);

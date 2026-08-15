@@ -10,7 +10,7 @@ import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
 import { Awards } from "@/components/sections/Awards";
 import { Experience } from "@/components/sections/Experience";
 import { Contact } from "@/components/sections/Contact";
-import { PhasePlaceholder } from "@/components/sections/PhasePlaceholder";
+import { ResumeSection } from "@/components/sections/ResumeSection";
 import { profile } from "@/data/profile";
 
 export const Route = createFileRoute("/")({
@@ -85,14 +85,8 @@ function Home() {
         {/* Awards & Certifications with Verification */}
         <Awards />
 
-        {/* Resume CTA */}
-        <PhasePlaceholder
-          id="resume"
-          eyebrow="Resume"
-          title="Ready to build something impactful?"
-          description="View or download Shahad's professional resume."
-          note="Resume PDF not added yet. Place it at public/resume/shahad-pathan-resume.pdf and set resumeAvailable to true in data/profile.ts."
-        />
+        {/* Interactive Resume & Verified PDF Section */}
+        <ResumeSection />
 
         {/* Full Contact Us Section */}
         <Contact />

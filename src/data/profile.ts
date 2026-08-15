@@ -17,20 +17,20 @@ export const profile = {
   footerLine: "Computer Engineer • AI • Data Science • Software",
   summary:
     "I design and build practical, intelligent software — from data-driven models to modern web interfaces. My focus is turning real problems into solutions that are useful, measurable and well engineered.",
-  location: "Mehsana, Gujarat, India",
-  institution: "Gujarat Technological University (GTU)",
+  location: "Mahesana, Gujarat, India",
+  institution: "Gujarat Technological University (GTU) - School of Engineering and Technology",
   graduationYear: "2028",
   email: "sahadpathan2697@gmail.com",
   phone: "+919913031752",
   github: "https://github.com/SHAHADPATHAN",
   linkedin: "https://www.linkedin.com/in/shahad-pathan/",
   website: "https://shahadpathan.vercel.app",
-  resumePath: "/resume/shahad-pathan-resume.pdf",
-  resumeAvailable: false,
+  resumePath: "/resume.pdf",
+  resumeAvailable: true,
   seo: {
     title: "Shahad Pathan",
     description:
-      "Shahad Pathan is a Computer Engineering student @ GTU (Class of 2028) building AI, Data Science and modern software solutions.",
+      "Shahad Pathan is a Computer Engineering student @ GTU (Class of 2028) focused on AI, Data Science, Python, and modern web software solutions.",
   },
 } as const;
 

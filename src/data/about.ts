@@ -13,10 +13,11 @@ export const about = {
   ],
   facts: [
     { label: "Degree", value: "B.E. Computer Engineering (2024 – 2028)" },
-    { label: "Institution", value: "Gujarat Technological University (GTU)" },
-    { label: "Location", value: "Mehsana, Gujarat, India" },
+    { label: "Institution", value: "Gujarat Technological University (GTU) - SET" },
+    { label: "Schooling", value: "Shri J.M. Chaudhary Sarvajanik Vidyalaya (HSC/SSC)" },
+    { label: "Location", value: "Mahesana, Gujarat, India" },
     { label: "Focus", value: "AI · Data Science · Software" },
-    { label: "Status", value: "Open to Internships & Projects" },
+    { label: "Status", value: "Open to Internships & AI/Data Roles" },
   ],
 } as const;
 

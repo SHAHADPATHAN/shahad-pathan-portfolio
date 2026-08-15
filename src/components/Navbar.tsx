@@ -49,7 +49,7 @@ export function Navbar() {
       }
 
       // 3. Find section that occupies the focus viewport zone
-      const sectionIds = ["about", "skills", "projects", "experience", "awards", "contact"];
+      const sectionIds = ["about", "skills", "projects", "experience", "awards", "resume", "contact"];
       let bestSection = "";
       let minDistance = Infinity;
 

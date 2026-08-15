@@ -40,43 +40,45 @@ export type SkillGroupData = {
 };
 
 export const allSkillsList: Skill[] = [
-  // Languages
-  { name: "Python", icon: Terminal, category: "Languages", level: "Core", description: "ML pipelines, FastAPI & Data modeling" },
-  { name: "TypeScript", icon: Braces, category: "Languages", level: "Production", description: "Typed web systems & interfaces" },
-  { name: "JavaScript", icon: Braces, category: "Languages", level: "Core", description: "Full-stack web logic & APIs" },
-  { name: "C++", icon: Code2, category: "Languages", level: "Advanced", description: "Data structures, algorithms & performance" },
-  { name: "C", icon: Code2, category: "Languages", level: "Advanced", description: "Systems programming & memory" },
-  { name: "SQL", icon: Database, category: "Languages", level: "Production", description: "Relational queries & indexing" },
+  // AI & Data (Data Scientist & AI Engineer Focus)
+  { name: "Machine Learning", icon: Brain, category: "AI & Data", level: "Production", description: "Supervised & unsupervised predictive modeling & pipelines" },
+  { name: "Computer Vision", icon: Cpu, category: "AI & Data", level: "Production", description: "OpenCV, frame segmentation & neural matting" },
+  { name: "Pandas", icon: Table2, category: "AI & Data", level: "Production", description: "Data cleaning, ETL pipelines & statistical EDA" },
+  { name: "NumPy", icon: Sigma, category: "AI & Data", level: "Production", description: "Vectorized mathematical computing & numerical tensors" },
+  { name: "Scikit-Learn", icon: Brain, category: "AI & Data", level: "Production", description: "Model selection, training pipelines & validation" },
+  { name: "Generative AI", icon: Sparkles, category: "AI & Data", level: "Advanced", description: "LLMs, prompt engineering & multimodal AI workflows" },
 
-  // AI & Data
-  { name: "Pandas", icon: Table2, category: "AI & Data", level: "Core", description: "Tabular data manipulation & EDA" },
-  { name: "NumPy", icon: Sigma, category: "AI & Data", level: "Core", description: "Vectorized mathematical computing" },
-  { name: "Scikit-Learn", icon: Brain, category: "AI & Data", level: "Production", description: "Supervised & unsupervised ML" },
-  { name: "Computer Vision", icon: Cpu, category: "AI & Data", level: "Production", description: "OpenCV, frame analysis & matting" },
-  { name: "Machine Learning", icon: Brain, category: "AI & Data", level: "Core", description: "Predictive modeling & classification" },
-  { name: "Generative AI", icon: Sparkles, category: "AI & Data", level: "Exploring", description: "LLMs, prompting & embeddings" },
+  // Languages (AI, Data Science & Full-Stack Development)
+  { name: "Python", icon: Terminal, category: "Languages", level: "Production", description: "Core AI/Data science, FastAPI & automation stack" },
+  { name: "SQL", icon: Database, category: "Languages", level: "Production", description: "Relational queries, analytical aggregations & indexing" },
+  { name: "TypeScript", icon: Braces, category: "Languages", level: "Production", description: "Typed web systems, interfaces & frontend architecture" },
+  { name: "JavaScript", icon: Braces, category: "Languages", level: "Production", description: "Full-stack web logic, APIs & asynchronous flows" },
+  { name: "C++", icon: Code2, category: "Languages", level: "Advanced", description: "Algorithms, data structures & performance computing" },
+  { name: "C", icon: Code2, category: "Languages", level: "Advanced", description: "Systems programming, memory management & fundamentals" },
 
-  // Frontend
-  { name: "React", icon: Layers, category: "Frontend", level: "Core", description: "Component systems & state flows" },
-  { name: "Next.js", icon: Boxes, category: "Frontend", level: "Production", description: "SSR, routing & modern web builds" },
-  { name: "Tailwind CSS", icon: Palette, category: "Frontend", level: "Core", description: "Design systems & responsive styling" },
-  { name: "HTML5 / CSS3", icon: LayoutTemplate, category: "Frontend", level: "Core", description: "Semantic, accessible layouts" },
+  // Frontend & UI Engineering
+  { name: "React.js", icon: Layers, category: "Frontend", level: "Production", description: "Component architectures, custom hooks & state flows" },
+  { name: "Next.js", icon: Boxes, category: "Frontend", level: "Production", description: "SSR, server components & modern web builds" },
+  { name: "Vite", icon: Sparkles, category: "Frontend", level: "Production", description: "Lightning-fast frontend builds & module bundling" },
+  { name: "Tailwind CSS", icon: Palette, category: "Frontend", level: "Production", description: "Modern design systems & responsive utility styling" },
+  { name: "HTML5 / CSS3", icon: LayoutTemplate, category: "Frontend", level: "Production", description: "Semantic, accessible layouts & micro-interactions" },
 
-  // Databases
-  { name: "MySQL", icon: Database, category: "Databases", level: "Core", description: "Relational schema design, indexes & queries" },
+  // Databases & Storage (Data & Backend)
+  { name: "PostgreSQL", icon: Database, category: "Databases", level: "Production", description: "ACID transactions, relational schemas & JSON fields" },
   { name: "Supabase", icon: Database, category: "Databases", level: "Production", description: "Postgres-backed realtime DB & Auth backend" },
-  { name: "PostgreSQL", icon: Database, category: "Databases", level: "Production", description: "ACID transactions & JSON fields" },
-  { name: "MongoDB", icon: Database, category: "Databases", level: "Exploring", description: "Document store & NoSQL collections" },
+  { name: "MySQL", icon: Database, category: "Databases", level: "Production", description: "Relational schema design, indexes & queries" },
+  { name: "MongoDB", icon: Database, category: "Databases", level: "Advanced", description: "Document collections & NoSQL data aggregation" },
 
-  // Tools & DevOps
-  { name: "Git", icon: GitBranch, category: "Tools", level: "Core", description: "Version control & collaboration" },
-  { name: "GitHub", icon: Github, category: "Tools", level: "Core", description: "CI/CD, repos & open source" },
-  { name: "FastAPI", icon: Server, category: "Tools", level: "Production", description: "High-speed async Python REST APIs" },
-  { name: "Docker", icon: ContainerIcon, category: "Tools", level: "Production", description: "Containerized application packaging" },
-  { name: "Linux / POSIX", icon: Terminal, category: "Tools", level: "Core", description: "Shell scripting, security & environments" },
-  { name: "Postman", icon: Wrench, category: "Tools", level: "Core", description: "API design, debugging & testing" },
-  { name: "VS Code", icon: Code2, category: "Tools", level: "Core", description: "Primary IDE & debugging workflow" },
-  { name: "n8n / Automation", icon: Workflow, category: "Tools", level: "Exploring", description: "Automated workflow orchestration" },
+  // Tools & DevOps (AI Engineering & Development)
+  { name: "FastAPI", icon: Server, category: "Tools", level: "Production", description: "High-speed async Python REST APIs for ML inference" },
+  { name: "Docker", icon: ContainerIcon, category: "Tools", level: "Production", description: "Containerized deployments for AI pipelines & apps" },
+  { name: "Git", icon: GitBranch, category: "Tools", level: "Production", description: "Version control, branching & collaborative workflows" },
+  { name: "GitHub", icon: Github, category: "Tools", level: "Production", description: "CI/CD automation, open-source repos & project tracking" },
+  { name: "Linux", icon: Terminal, category: "Tools", level: "Advanced", description: "Shell scripting, security & production environments" },
+  { name: "Vercel", icon: Server, category: "Tools", level: "Production", description: "Edge hosting, serverless CI/CD & web deployments" },
+  { name: "Postman", icon: Wrench, category: "Tools", level: "Production", description: "API design, debugging & endpoint test suites" },
+  { name: "n8n Automation", icon: Workflow, category: "Tools", level: "Advanced", description: "Automated workflow orchestration & AI integrations" },
+  { name: "VS Code", icon: Code2, category: "Tools", level: "Production", description: "Primary IDE, extensions & debugging workflows" },
 ];
 
 export const skillCategories = [
@@ -127,3 +129,5 @@ export const skillGroups: SkillGroupData[] = [
     skills: allSkillsList.filter((s) => s.category === "Tools"),
   },
 ];
+
+export const isSkillPlaceholder = (name: string) => name.startsWith("[ADD");

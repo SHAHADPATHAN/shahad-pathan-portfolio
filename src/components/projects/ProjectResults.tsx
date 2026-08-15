@@ -7,7 +7,7 @@ import { ScrollReveal } from "@/components/motion/ScrollReveal";
 export function ProjectResults({ project }: { project: Project }) {
   const results = project.results && project.results.length > 0 ? project.results : [];
   const isDefaultPending =
-    results.length === 1 && results[0].toLowerCase().includes("will be added after");
+    results.length === 1 && Boolean(results[0]?.toLowerCase().includes("will be added after"));
 
   return (
     <section aria-labelledby="project-results-heading" className="border-t border-border py-16 lg:py-24">
