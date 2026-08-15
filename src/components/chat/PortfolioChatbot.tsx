@@ -22,17 +22,24 @@ interface ChatMessage {
 }
 
 const INITIAL_SUGGESTIONS = [
+  "Who is Shahad Pathan?",
   "What are Shahad's top AI projects?",
+  "Tell me about his certifications & hackathons",
   "Explain how Binary Search works",
   "What is the difference between SQL and NoSQL?",
-  "How can I contact Shahad?",
+  "How can I contact or hire Shahad?",
 ];
 
 function FormattedMessageText({ text }: { text: string }) {
   const lines = text.split("\n");
   return (
-    <div className="space-y-1">
+    <div className="space-y-1.5">
       {lines.map((line, lineIdx) => {
+        // Render code block fences
+        if (line.startsWith("```")) {
+          return null;
+        }
+
         const parts = line.split(/(\*\*.*?\*\*|`.*?`|\[.*?\]\(.*?\))/g);
         return (
           <p key={lineIdx} className="leading-relaxed">
@@ -92,23 +99,28 @@ export function PortfolioChatbot() {
     {
       id: "welcome-1",
       sender: "bot",
-      text: `👋 Hi there! I'm **Shahad AI** — an intelligent assistant here to help with both **Shahad's portfolio** (projects, skills, internships, contact) and **any general coding, AI, tech, or logic questions**!\n\nFeel free to ask anything!`,
+      text: `👋 Hi there! I'm **Shahad AI** — your intelligent pair assistant trained on **Shahad Pathan's engineering portfolio** (projects, skills, internships, certifications, resume) and **broad computer science, AI, and software engineering topics**!\n\nWhat would you like to explore?`,
       timestamp: "Just now",
       quickActions: [
         {
-          label: "🚀 Top Projects",
+          label: "👤 About Shahad",
+          icon: "skill",
+          action: () => handleSend("Who is Shahad Pathan?"),
+        },
+        {
+          label: "🚀 Top AI Projects",
           icon: "project",
           action: () => handleSend("What are Shahad's top AI projects?"),
         },
         {
-          label: "⚡ Tech Stack",
-          icon: "skill",
-          action: () => handleSend("What is Shahad's tech stack?"),
+          label: "🏆 Certifications & Awards",
+          icon: "project",
+          action: () => handleSend("What certifications and awards does Shahad have?"),
         },
         {
-          label: "💡 Coding / Tech Help",
+          label: "💡 Coding / Algorithm Help",
           icon: "skill",
-          action: () => handleSend("Explain how Binary Search works"),
+          action: () => handleSend("Explain how Binary Search works in Python"),
         },
       ],
     },
@@ -133,22 +145,24 @@ export function PortfolioChatbot() {
   const generateBotResponse = (userQuery: string): { text: string; quickActions?: ChatMessage["quickActions"] } => {
     const q = userQuery.toLowerCase().trim();
 
+    // Helper token checkers
+    const has = (...terms: string[]) => terms.some((t) => q.includes(t));
+    const hasAll = (...terms: string[]) => terms.every((t) => q.includes(t));
+
     // -------------------------------------------------------------
-    // 1. SPECIFIC PORTFOLIO QUERIES
+    // SECTION 1: SHAHAD'S PORTFOLIO, BIO & EDUCATION
     // -------------------------------------------------------------
+
+    // Who is Shahad / Bio / Tell me about yourself
     if (
-      q.includes("project") ||
-      q.includes("wriper") ||
-      q.includes("vidsnap") ||
-      q.includes("vimabazzar") ||
-      q.includes("portfolio") ||
-      q.includes("what did shahad build")
+      has("who is shahad", "tell me about yourself", "who are you", "about shahad", "bio", "introduce yourself", "profile", "background") ||
+      (has("who", "what") && has("shahad", "pathan"))
     ) {
       return {
-        text: `Here are Shahad's core featured systems:\n\n1. **Wriper AI**: High-performance AI background removal and image segmentation tool built with React & Computer Vision models ([wriper.vercel.app](https://wriper.vercel.app)).\n2. **VidSnap AI**: AI-driven video intelligence platform for automated frame extraction, media indexing, and video processing.\n3. **VimaBazzar**: Modern, responsive insurance discovery and policy comparison platform ([vimabazzar.vercel.app](https://vimabazzar.vercel.app)).`,
+        text: `**Shahad Pathan** is a Computer Engineering student (Class of 2028) at **Gujarat Technological University (GTU)**, specializing in **Artificial Intelligence, Data Science, and Scalable Full-Stack Web Architecture**.\n\n✨ **Key Highlights:**\n• **Shipped Production AI Systems**: Creator of **Wriper AI** (AI background removal) and **VidSnap AI** (automated video intelligence).\n• **4 Engineering Internships**: Hands-on technical experience with ISRO space tutor (Agnirva), AI modeling, and full-stack software.\n• **11+ Verified Credentials**: Including National Road Safety Hackathon (NHAI/MoRTH), TechExpo IIT Guwahati, Oracle Cloud Infrastructure AI 2025 Certified, IBM Data Science, and AWS Generative BI.\n• **Core Languages**: Python, TypeScript, React, Next.js, PyTorch, C++, and PostgreSQL.`,
         quickActions: [
           {
-            label: "Explore Projects Section",
+            label: "🚀 View Featured Projects",
             icon: "project",
             action: () => {
               setIsOpen(false);
@@ -156,7 +170,11 @@ export function PortfolioChatbot() {
             },
           },
           {
-            label: "Contact Shahad",
+            label: "📄 Download Resume",
+            action: () => handleSend("Can I download Shahad's resume?"),
+          },
+          {
+            label: "📬 Contact Shahad",
             icon: "mail",
             action: () => handleSend("How can I contact Shahad?"),
           },
@@ -164,40 +182,211 @@ export function PortfolioChatbot() {
       };
     }
 
-    if (
-      q.includes("shahad's stack") ||
-      q.includes("shahad skills") ||
-      q.includes("what does shahad know") ||
-      q.includes("his tech stack")
-    ) {
+    // Education / University / GTU / Degree / College
+    if (has("education", "college", "university", "gtu", "gujarat technological", "degree", "graduation", "study", "engineering major", "academic")) {
       return {
-        text: `Shahad works across full-stack engineering and AI modeling:\n\n• **Languages**: Python, TypeScript, JavaScript, C++, C, SQL\n• **AI & Data Science**: PyTorch, OpenCV, FastAI, Scikit-Learn, Pandas, NumPy, Computer Vision\n• **Frontend & Web**: React, Next.js, TanStack Start, Tailwind CSS, Vite, HTML5/CSS3\n• **Databases & Cloud**: PostgreSQL, MySQL, Supabase, SQLite, Redis, Docker, Git, Linux, Vercel, Render`,
+        text: `🎓 **Education & Academic Background:**\n\n• **Degree**: Bachelor of Engineering (B.E.) in Computer Engineering (2024 – 2028, GTU '28).\n• **Institution**: Gujarat Technological University (GTU), Gujarat, India.\n• **Core Coursework**: Data Structures & Algorithms, Object-Oriented Programming, Database Management Systems, Machine Learning Foundations, Operating Systems, and Computer Networks.\n• **Focus Areas**: Deep Learning, Computer Vision pipelines, Data Pipelines, and Full-Stack Engineering.`,
         quickActions: [
           {
-            label: "View Interactive Tools Terminal",
-            icon: "skill",
+            label: "Explore About Section",
             action: () => {
               setIsOpen(false);
-              document.getElementById("skills")?.scrollIntoView({ behavior: "smooth" });
+              document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+            },
+          },
+          {
+            label: "View Skills & Tech Stack",
+            icon: "skill",
+            action: () => handleSend("What is Shahad's tech stack?"),
+          },
+        ],
+      };
+    }
+
+    // Location / Where are you based
+    if (has("location", "where do you live", "where are you from", "based in", "city", "mehsana", "gujarat", "address")) {
+      return {
+        text: `📍 **Location & Availability:**\n\nShahad is based in **Mehsana, Gujarat, India**.\n\nHe is available for:\n• **Remote Software & AI Engineering Internships** (Global & India)\n• **On-site / Hybrid Opportunities** across Gujarat and major tech hubs\n• **Freelance Full-Stack & AI Development Projects**`,
+        quickActions: [
+          {
+            label: "📬 Send an Email",
+            icon: "mail",
+            action: () => handleSend("How can I contact Shahad?"),
+          },
+        ],
+      };
+    }
+
+    // Resume / CV / Download
+    if (has("resume", "cv", "curriculum vitae", "download cv", "download resume", "bio data")) {
+      return {
+        text: `📄 **Shahad Pathan's Official Resume:**\n\nYou can download or view Shahad's comprehensive CV containing full educational details, internship history, technical stack, and verified credentials.\n\n• **Resume File**: [Download Official Resume (PDF)](/resume.pdf)\n• **Quick Overview**: B.E. Computer Engineering (GTU '28) · 4 Internships · 11+ Certifications · AI & Full-Stack.`,
+        quickActions: [
+          {
+            label: "📥 Open Resume Link",
+            action: () => {
+              window.open("/resume.pdf", "_blank");
+            },
+          },
+          {
+            label: "📬 Initiate Contact",
+            icon: "mail",
+            action: () => handleSend("How can I contact Shahad?"),
+          },
+        ],
+      };
+    }
+
+    // Contact / Email / Phone / Hire / Internship Opportunities
+    if (has("contact", "email", "phone", "hire", "reach out", "collaborate", "opportunity", "available for internship", "message")) {
+      return {
+        text: `📬 **Get in Touch with Shahad Pathan:**\n\nShahad is **actively open to software engineering internships, AI/ML roles, and collaborative projects**!\n\n• **Email**: \`${profile.email}\`\n• **Phone**: \`${profile.phone}\`\n• **Location**: ${profile.location}\n• **GitHub**: [github.com/sahadpathan](https://github.com/sahadpathan)\n• **LinkedIn**: [linkedin.com/in/sahad-pathan-758999335](https://www.linkedin.com/in/sahad-pathan-758999335/)`,
+        quickActions: [
+          {
+            label: "📋 Copy Email Address",
+            action: () => copyToClipboard(profile.email),
+          },
+          {
+            label: "✉️ Go to Contact Form",
+            icon: "mail",
+            action: () => {
+              setIsOpen(false);
+              document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
             },
           },
         ],
       };
     }
 
-    if (
-      q.includes("experience") ||
-      q.includes("internship") ||
-      q.includes("education") ||
-      q.includes("gtu") ||
-      q.includes("college") ||
-      q.includes("degree")
-    ) {
+    // Social Links
+    if (has("linkedin", "github", "social", "twitter", "x profile", "find me")) {
       return {
-        text: `🎓 **Education**:\n• **Gujarat Technological University (GTU)** — B.E. in Computer Engineering (2024 – 2028, GTU '28).\n\n💼 **Experience & Internships**:\nShahad has completed 4 hands-on engineering internships focused on AI algorithms, full-stack web applications, and data pipeline architectures.`,
+        text: `🌐 **Official Online Profiles:**\n\n• **GitHub**: [github.com/sahadpathan](https://github.com/sahadpathan) — Open-source repositories, AI pipelines, and web apps.\n• **LinkedIn**: [Shahad Pathan on LinkedIn](https://www.linkedin.com/in/sahad-pathan-758999335/) — Professional network, internship updates, and verified licenses.\n• **Email**: \`${profile.email}\``,
+      };
+    }
+
+    // -------------------------------------------------------------
+    // SECTION 2: SPECIFIC PROJECTS
+    // -------------------------------------------------------------
+
+    // Wriper AI
+    if (has("wriper", "background removal", "image segmentation", "wriper ai")) {
+      return {
+        text: `✨ **Wriper AI (AI Background Removal Suite):**\n\n• **Description**: Ultra-fast image background removal and subject isolation tool powered by optimized Computer Vision segmentation models.\n• **Tech Stack**: React, TypeScript, Next.js, Python, OpenCV, Tailwind CSS, Vercel.\n• **Features**: Instant drag-and-drop, client-side batch processing, high-resolution PNG exports, and zero latency.\n• **Live Demo**: [wriper.vercel.app](https://wriper.vercel.app)`,
         quickActions: [
           {
-            label: "View Experience Carousel",
+            label: "🌐 Open Wriper AI Live Demo",
+            action: () => window.open("https://wriper.vercel.app", "_blank"),
+          },
+          {
+            label: "🚀 View All Projects",
+            icon: "project",
+            action: () => {
+              setIsOpen(false);
+              document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+            },
+          },
+        ],
+      };
+    }
+
+    // VidSnap AI
+    if (has("vidsnap", "video intelligence", "frame extraction", "vidsnap ai")) {
+      return {
+        text: `🎥 **VidSnap AI (Automated Video Intelligence):**\n\n• **Description**: Automated platform for extracting keyframes, indexing media, and summarizing video content using machine learning.\n• **Tech Stack**: Python, OpenCV, FastAPI, PyTorch, React, Tailwind CSS.\n• **Features**: Temporal scene boundary detection, OCR metadata extraction from video slides, and smart audio-visual indexing.`,
+        quickActions: [
+          {
+            label: "🚀 View Project in Showcase",
+            icon: "project",
+            action: () => {
+              setIsOpen(false);
+              document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+            },
+          },
+        ],
+      };
+    }
+
+    // VimaBazzar
+    if (has("vimabazzar", "insurance", "policy comparison", "vima")) {
+      return {
+        text: `🛡️ **VimaBazzar (Insurance Discovery Platform):**\n\n• **Description**: Responsive fintech web application for exploring, calculating, and comparing insurance policies seamlessly.\n• **Tech Stack**: React, TypeScript, Tailwind CSS, Vite, REST APIs.\n• **Live Demo**: [vimabazzar.vercel.app](https://vimabazzar.vercel.app)`,
+        quickActions: [
+          {
+            label: "🌐 Open VimaBazzar Live",
+            action: () => window.open("https://vimabazzar.vercel.app", "_blank"),
+          },
+        ],
+      };
+    }
+
+    // All Projects query
+    if (has("project", "projects", "what did shahad build", "built", "showcase", "portfolio work", "apps")) {
+      return {
+        text: `🚀 **Featured Engineering Projects:**\n\n1. **Wriper AI**: High-performance AI background removal & image segmentation suite ([wriper.vercel.app](https://wriper.vercel.app)).\n2. **VidSnap AI**: Automated video intelligence, frame extraction, and temporal video analysis.\n3. **VimaBazzar**: Modern insurance comparison & policy discovery platform ([vimabazzar.vercel.app](https://vimabazzar.vercel.app)).\n4. **Developer Portfolio**: High-performance interactive portfolio built with TanStack Start, React 19, TypeScript, and Tailwind CSS v4.`,
+        quickActions: [
+          {
+            label: "🚀 Explore Projects Grid",
+            icon: "project",
+            action: () => {
+              setIsOpen(false);
+              document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+            },
+          },
+          {
+            label: "⚡ Tech Stack",
+            icon: "skill",
+            action: () => handleSend("What is Shahad's tech stack?"),
+          },
+        ],
+      };
+    }
+
+    // -------------------------------------------------------------
+    // SECTION 3: CERTIFICATIONS, HACKATHONS & INTERNSHIPS
+    // -------------------------------------------------------------
+
+    // Hackathons & Competitions (NHAI, IIT Guwahati)
+    if (has("hackathon", "nhai", "road safety", "iit", "guwahati", "techexpo", "competition")) {
+      return {
+        text: `🏆 **Hackathons & Technical Exhibitions:**\n\n1. **National Road Safety Hackathon 2025 (NHAI & MoRTH)**:\n   • Organized jointly by National Highways Authority of India & HOAI.\n   • Engineered AI & sensor fusion concepts for intelligent road safety.\n   • Credential ID: \`NHAI-RSH-2025-SP\`\n\n2. **TechExpo — Indian Institute of Technology (IIT) Guwahati**:\n   • Represented Gujarat Technological University (GTU) showcasing engineering innovation.\n   • Credential ID: \`UNSTOP-IITG-TECHEXPO-SP\``,
+        quickActions: [
+          {
+            label: "🏆 View Certificates Reel",
+            icon: "project",
+            action: () => {
+              setIsOpen(false);
+              document.getElementById("awards")?.scrollIntoView({ behavior: "smooth" });
+            },
+          },
+        ],
+      };
+    }
+
+    // Certifications in detail (Oracle, IBM, AWS, Cisco, ISRO, ISEA)
+    if (has("certificate", "certificates", "certification", "certifications", "oracle", "ibm", "cisco", "isea", "aws", "awards", "credentials")) {
+      return {
+        text: `📜 **11+ Verified Certifications & Honors:**\n\n• **Oracle**: Cloud Infrastructure 2025 Certified AI Foundations Associate (\`325886566OCI25AICFA\`)\n• **National Hackathon**: NHAI & Ministry of Road Transport 2025 (\`NHAI-RSH-2025-SP\`)\n• **IIT Guwahati**: TechExpo Technical Project Exhibition\n• **IBM (Coursera)**: What is Data Science? (\`ERHFN1IDMW5Y\`)\n• **AWS Training**: Generative BI with Amazon Q in QuickSight\n• **ISRO / Agnirva**: Space Engineering & Satellite Internship Program\n• **Cisco Networking Academy**: Networking Basics & Packet Routing\n• **Govt of India (MeitY / C-DAC)**: National Cyber Security Pledge & Email Security Defense\n• **CodeWithHarry**: Complete Python Mastery Bootcamp`,
+        quickActions: [
+          {
+            label: "🏆 Open Certificates Lightbox",
+            icon: "project",
+            action: () => {
+              setIsOpen(false);
+              document.getElementById("awards")?.scrollIntoView({ behavior: "smooth" });
+            },
+          },
+        ],
+      };
+    }
+
+    // Internships & Work Experience
+    if (has("internship", "internships", "experience", "work history", "jobs", "rotary", "agnirva", "internshala", "techvritti")) {
+      return {
+        text: `💼 **Engineering Internships & Work Experience:**\n\nShahad has completed **4 hands-on internships**:\n\n1. **Agnirva (ISRO Registered Space Tutor)**: Space engineering internship covering satellite systems, orbital telemetry, and aerospace data analysis.\n2. **Rotary International**: On-site community project coordination and operational logistics.\n3. **Internshala Student Partner (ISP)**: Community outreach and developer engagement.\n4. **TechVritti (in partnership with Microsoft)**: Applied AI workshop and model engineering.`,
+        quickActions: [
+          {
+            label: "💼 View Experience Section",
             icon: "project",
             action: () => {
               setIsOpen(false);
@@ -208,144 +397,212 @@ export function PortfolioChatbot() {
       };
     }
 
-    if (
-      q.includes("contact") ||
-      q.includes("email") ||
-      q.includes("phone") ||
-      q.includes("hire") ||
-      q.includes("available for internship")
-    ) {
+    // Tech Stack & Skills
+    if (has("stack", "skills", "technologies", "languages", "tools", "what does shahad know", "frameworks", "database skills")) {
       return {
-        text: `Shahad is **actively open for software engineering internships, AI/ML roles, and collaborative projects**!\n\n📬 **Email**: \`${profile.email}\`\n📱 **Phone**: \`${profile.phone}\`\n📍 **Location**: ${profile.location}`,
+        text: `⚡ **Technical Skills & Stack:**\n\n• **Programming Languages**: Python, TypeScript, JavaScript, C++, C, SQL, HTML5/CSS3\n• **AI & Machine Learning**: PyTorch, OpenCV, Computer Vision, Scikit-Learn, Pandas, NumPy, FastAI\n• **Frontend Engineering**: React 19, Next.js, TanStack Start, Tailwind CSS, Vite, Radix UI\n• **Backend & Cloud**: Node.js, FastAPI, PostgreSQL, MySQL, Supabase, Redis, Docker, Git, Linux, Vercel`,
         quickActions: [
           {
-            label: "Open Direct Contact Form",
-            icon: "mail",
+            label: "⚡ View Interactive Skills Matrix",
+            icon: "skill",
             action: () => {
               setIsOpen(false);
-              document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+              document.getElementById("skills")?.scrollIntoView({ behavior: "smooth" });
             },
-          },
-          {
-            label: "Copy Email Address",
-            action: () => copyToClipboard(profile.email),
           },
         ],
       };
     }
 
     // -------------------------------------------------------------
-    // 2. GENERAL CODING, AI, ALGORITHMS & TECH QUESTIONS
+    // SECTION 4: COMPUTER SCIENCE, ALGORITHMS & CODING
     // -------------------------------------------------------------
 
-    // Binary Search / Sorting / Algorithms
-    if (q.includes("binary search") || q.includes("search algorithm")) {
+    // Binary Search
+    if (has("binary search", "binarysearch")) {
       return {
-        text: `**Binary Search** is an efficient divide-and-conquer search algorithm with **O(log n)** time complexity.\n\n**How it works:**\n1. Requires a **sorted array**.\n2. Compares the target with the middle element.\n3. If target matches middle, return index.\n4. If target is smaller, search the left half; if larger, search the right half.\n\n\`\`\`python\ndef binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n\`\`\``,
+        text: `**Binary Search Algorithm (O(log n)):**\n\nBinary Search efficiently locates a target value within a **sorted array** by repeatedly halving the search interval.\n\n\`\`\`python\ndef binary_search(nums: list[int], target: int) -> int:\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1  # Target not found\n\`\`\`\n\n• **Time Complexity**: Best O(1), Average/Worst **O(log n)**\n• **Space Complexity**: **O(1)** (Iterative)`,
       };
     }
 
-    // SQL vs NoSQL / Databases
-    if (q.includes("sql vs nosql") || q.includes("difference between sql and nosql") || q.includes("nosql vs sql")) {
+    // Two Sum / Arrays
+    if (has("two sum", "twosum")) {
       return {
-        text: `**SQL vs NoSQL Databases:**\n\n• **SQL (Relational)**: Structured with fixed schemas, tables, rows, and ACID transactions. Examples: PostgreSQL, MySQL, SQLite. Best for relational data, finance, and complex JOIN queries.\n\n• **NoSQL (Non-Relational)**: Flexible schema with key-value, document (JSON), wide-column, or graph models. Examples: MongoDB, Redis, Cassandra. Best for rapid scaling, unstructured documents, and high write throughput.`,
+        text: `**Two Sum (Optimal O(n) Hash Map Approach):**\n\n\`\`\`python\ndef two_sum(nums: list[int], target: int) -> list[int]:\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []\n\`\`\`\n\n• **Time Complexity**: **O(n)** single pass\n• **Space Complexity**: **O(n)** for hash map lookup`,
       };
     }
 
-    // PyTorch vs TensorFlow / Deep Learning
-    if (q.includes("pytorch") || q.includes("tensorflow") || q.includes("deep learning framework")) {
+    // QuickSort / MergeSort / Sorting
+    if (has("quicksort", "merge sort", "sorting algorithm", "sort array")) {
       return {
-        text: `**PyTorch** is a dynamic open-source machine learning framework developed by Meta AI and widely used in AI research and production.\n\n**Key Highlights:**\n• **Dynamic Computation Graphs (Eager execution)**: Intuitive debugging with standard Python flow.\n• **GPU Acceleration**: High-performance tensor computation via CUDA.\n• **Rich Ecosystem**: TorchVision for Computer Vision, HuggingFace Transformers for NLP, and PyTorch Lightning.`,
+        text: `**Sorting Algorithms Comparison:**\n\n• **QuickSort**: Divide-and-conquer using a pivot element. Average time **O(n log n)**, in-place **O(log n)** space, cache-friendly.\n• **MergeSort**: Stable divide-and-conquer dividing into equal halves. Guaranteed **O(n log n)** time, requires **O(n)** auxiliary space.\n\n\`\`\`python\n# QuickSort in Python\ndef quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)\n\`\`\``,
       };
     }
 
-    // Computer Vision / CNNs
-    if (q.includes("computer vision") || q.includes("cnn") || q.includes("convolutional")) {
+    // Big-O / Time Complexity
+    if (has("big o", "time complexity", "space complexity", "asymptotic")) {
       return {
-        text: `**Computer Vision (CV)** enables computers to extract meaningful insights from digital images and videos.\n\n**Core Concepts:**\n• **CNNs (Convolutional Neural Networks)**: Use spatial filters/kernels to detect edges, textures, and object hierarchies.\n• **Segmentation (e.g. in Wriper AI)**: Classifying individual pixels as foreground subject vs background.\n• **Object Detection (YOLO, Faster R-CNN)**: Locating and classifying multiple bounding boxes in real time.`,
+        text: `**Big-O Complexity Cheat Sheet:**\n\n• **O(1) Constant**: Hash map lookup, array index access.\n• **O(log n) Logarithmic**: Binary Search, Balanced BST operations.\n• **O(n) Linear**: Single array traversal, linear search.\n• **O(n log n) Linearithmic**: MergeSort, QuickSort (average), HeapSort.\n• **O(n²) Quadratic**: Nested loops (Bubble Sort, Selection Sort).\n• **O(2ⁿ) Exponential**: Recursive Fibonacci without memoization.\n• **O(n!) Factorial**: Traveling Salesperson brute force.`,
       };
     }
 
-    // React / Next.js / Frontend
-    if (q.includes("react") || q.includes("virtual dom") || q.includes("hooks") || q.includes("next.js")) {
+    // BFS vs DFS / Graphs / Trees
+    if (has("bfs", "dfs", "breadth first", "depth first", "graph traversal", "tree traversal")) {
       return {
-        text: `**React** is a declarative, component-based UI library built on a Virtual DOM.\n\n**Key Concepts:**\n• **Components & Props**: Reusable UI blocks passing unidirectional data.\n• **State & Hooks**: \`useState\`, \`useEffect\`, \`useRef\`, \`useMemo\` to manage lifecycle and reactive UI.\n• **Modern Server Frameworks**: Next.js and TanStack Start for server-side rendering (SSR), streaming, and edge routing.`,
+        text: `**BFS vs DFS (Graph & Tree Traversal):**\n\n• **BFS (Breadth-First Search)**: Explores neighbor-by-neighbor level-wise using a **Queue (FIFO)**. Best for shortest path in unweighted graphs.\n• **DFS (Depth-First Search)**: Explores as deep as possible along each branch using a **Stack (LIFO)** or recursion. Best for cycle detection, topological sorting, and maze exploration.\n\n• **Time Complexity**: **O(V + E)** for graphs, **O(N)** for trees.`,
       };
     }
 
-    // Docker / Containers
-    if (q.includes("docker") || q.includes("container") || q.includes("kubernetes")) {
+    // Dynamic Programming
+    if (has("dynamic programming", "memoization", "dp", "tabulation", "knapsack")) {
       return {
-        text: `**Docker** packages applications and their dependencies into lightweight, standalone containers to ensure consistent execution across development and production.\n\n**Container vs Virtual Machine:**\n• Containers share the host OS kernel → lightweight, instant boot, minimal memory footprint.\n• VMs run full guest operating systems on a hypervisor → heavier overhead.`,
+        text: `**Dynamic Programming (DP):**\n\nAn optimization technique that solves complex problems by breaking them into overlapping subproblems and storing subproblem results (avoiding redundant calculations).\n\n• **Two Core Approaches:**\n  1. **Top-Down with Memoization**: Recursion + Cache.\n  2. **Bottom-Up with Tabulation**: Iterative table filling.\n\n\`\`\`python\n# Fibonacci with Tabulation O(n) time, O(1) space\ndef fib(n):\n    if n <= 1:\n        return n\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\`\`\``,
       };
     }
 
-    // Supabase
-    if (q.includes("supabase")) {
+    // -------------------------------------------------------------
+    // SECTION 5: ARTIFICIAL INTELLIGENCE & MACHINE LEARNING
+    // -------------------------------------------------------------
+
+    // Machine Learning / Supervised vs Unsupervised
+    if (has("machine learning", "supervised", "unsupervised", "what is ml", "reinforcement learning")) {
       return {
-        text: `**Supabase** is an open-source Firebase alternative built on top of **PostgreSQL**.\n\n**Features:**\n• Instant RESTful & GraphQL APIs automatically generated from your schema.\n• Real-time WebSocket subscriptions on database row changes.\n• Built-in Auth, Row Level Security (RLS), and Vector Embeddings (\`pgvector\`).`,
+        text: `**Machine Learning Paradigms:**\n\n1. **Supervised Learning**: Model learns mapping from labeled input-output pairs $(X \to y)$. Examples: Linear Regression, Random Forests, Neural Networks.\n2. **Unsupervised Learning**: Finds hidden patterns/clusters in unlabeled data $(X)$. Examples: K-Means, PCA, Autoencoders.\n3. **Reinforcement Learning (RL)**: Agent learns optimal policy through trial-and-error rewards and penalties in an environment (Q-Learning, PPO).`,
       };
     }
 
-    // Python questions / code help
-    if (q.includes("python") || q.includes("reverse a string") || q.includes("list comprehension")) {
+    // PyTorch vs TensorFlow
+    if (has("pytorch", "tensorflow", "keras", "deep learning framework")) {
       return {
-        text: `**Python Quick Snippets:**\n\n• **Reverse a string**: \`s[::-1]\`\n• **List comprehension**: \`[x * 2 for x in nums if x > 0]\`\n• **Dictionary comprehension**: \`{k: v for k, v in zip(keys, values)}\`\n• **Enumerate**: \`for i, val in enumerate(items):\`\n\nNeed help writing a specific algorithm or script? Just type your prompt!`,
+        text: `**PyTorch vs TensorFlow:**\n\n• **PyTorch (Meta AI)**: Features dynamic computation graphs (*eager execution*), Pythonic syntax, and first-class GPU tensor acceleration with CUDA. Preferred in research, Generative AI, and computer vision.\n• **TensorFlow (Google)**: Strong ecosystem with TFLite (edge deployment), TensorFlow Serving, and TF.js for production pipelines.\n\nShahad primarily utilizes **PyTorch** for computer vision and custom deep learning pipelines.`,
       };
     }
 
-    // Git / Version Control
-    if (q.includes("git") || q.includes("git merge vs rebase") || q.includes("version control")) {
+    // Computer Vision / CNNs / YOLO / Segmentation
+    if (has("computer vision", "cnn", "convolutional", "yolo", "opencv", "segmentation")) {
       return {
-        text: `**Git Fundamentals:**\n\n• **Merge**: Combines two branches with a dedicated merge commit, preserving exact branch history.\n• **Rebase**: Moves or replays commits on top of the target base branch for a clean, linear git history.\n• **Cherry-pick**: Applies a specific commit from one branch to your current branch.`,
+        text: `**Computer Vision & Visual AI:**\n\n• **CNNs (Convolutional Neural Networks)**: Use spatial convolutional kernels/filters to extract local feature maps (edges $\to$ textures $\to$ object parts).\n• **Semantic & Instance Segmentation**: Classifying pixels individually (e.g. in *Wriper AI* for clean background removal).\n• **Object Detection (YOLO, Faster R-CNN)**: Simultaneously predicts bounding boxes and class probabilities in real-time.\n• **Key Libraries**: OpenCV, PyTorch TorchVision, Albumentations, PIL.`,
       };
     }
 
-    // Jokes / Casual / Fun
-    if (q.includes("joke") || q.includes("funny")) {
+    // LLMs, Transformers & RAG
+    if (has("llm", "large language model", "transformer", "rag", "retrieval augmented", "attention mechanism", "generative ai", "genai", "prompt engineering")) {
       return {
-        text: `😄 Why do programmers prefer dark mode?\n\nBecause light attracts bugs! 🐛\n\nAsk me anything else about coding, algorithms, or Shahad's systems!`,
+        text: `**Modern Generative AI & Large Language Models:**\n\n• **Transformer Architecture**: Relies on **Self-Attention** mechanisms $(Q, K, V)$ to capture long-range contextual relationships in parallel without recurrence.\n• **RAG (Retrieval-Augmented Generation)**: Combines LLMs with external knowledge bases via vector embeddings (\`pgvector\`, Pinecone) to eliminate hallucinations and provide grounded responses.\n• **Fine-Tuning (LoRA/QLoRA)**: Efficiently adapts pre-trained weights for specialized domain tasks with minimal compute.`,
       };
     }
 
-    // General Greetings
-    if (q.includes("hi") || q.includes("hello") || q.includes("hey") || q.includes("namaste") || q.includes("good morning") || q.includes("good evening")) {
+    // -------------------------------------------------------------
+    // SECTION 6: WEB, BACKEND & DATABASES
+    // -------------------------------------------------------------
+
+    // SQL vs NoSQL / Databases / ACID
+    if (has("sql vs nosql", "nosql vs sql", "database", "postgres", "mongodb", "redis", "acid", "sql")) {
       return {
-        text: `Hello! Great to meet you! 😊\n\nI can assist you with **any general software/coding/AI question**, as well as anything regarding **Shahad Pathan's portfolio and projects**. What would you like to discuss today?`,
+        text: `**SQL vs NoSQL Databases:**\n\n• **SQL (Relational)**: Structured tables, schemas, relationships, and **ACID** transaction guarantees (Atomicity, Consistency, Isolation, Durability). Examples: PostgreSQL, MySQL, SQLite. Best for structured finance, relational data, and complex JOINs.\n\n• **NoSQL (Non-Relational)**: Flexible schema with Document (MongoDB), Key-Value (Redis), or Graph formats. Best for high-velocity writes, unstructured JSON data, and horizontal scaling.`,
+      };
+    }
+
+    // React, Next.js, TanStack Start & Frontend
+    if (has("react", "next.js", "tanstack", "virtual dom", "hooks", "usestate", "useeffect", "frontend", "tailwind")) {
+      return {
+        text: `**Modern Frontend Architecture:**\n\n• **React 19 & Hooks**: Declarative UI powered by hooks (\`useState\`, \`useEffect\`, \`useMemo\`, \`useCallback\`, \`useRef\`) and unified Server Actions.\n• **TanStack Start & Next.js**: Full-stack type-safe frameworks offering Server-Side Rendering (SSR), Static Site Generation (SSG), and streamable layouts.\n• **Tailwind CSS**: Utility-first CSS engine enabling rapid styling with zero runtime overhead and dynamic dark-mode tokenization.`,
+      };
+    }
+
+    // REST vs GraphQL vs gRPC / APIs
+    if (has("rest", "graphql", "grpc", "api", "http status", "websocket")) {
+      return {
+        text: `**API Protocols & Communication:**\n\n• **REST**: Resource-based URLs using standard HTTP verbs (\`GET\`, \`POST\`, \`PUT\`, \`DELETE\`). Stateless, cacheable, and universally supported.\n• **GraphQL**: Single endpoint allowing clients to query exactly the fields needed, eliminating over-fetching and under-fetching.\n• **gRPC**: High-performance RPC protocol using HTTP/2 and Protocol Buffers (Protobuf) for ultra-low latency microservice communication.\n• **WebSockets**: Full-duplex persistent TCP connections for real-time live events.`,
+      };
+    }
+
+    // Docker & DevOps
+    if (has("docker", "kubernetes", "container", "devops", "ci/cd", "git")) {
+      return {
+        text: `**DevOps & Containerization:**\n\n• **Docker Containers**: Package application code, runtime, and system dependencies together into lightweight, isolated containers that execute consistently across all environments.\n• **Containers vs VMs**: Containers share the host OS kernel (boot in milliseconds, minimal RAM), whereas VMs require a full hypervisor and guest OS.\n• **Git Fundamentals**: \`git rebase\` keeps a clean linear commit history; \`git merge\` preserves exact branch branching context.`,
+      };
+    }
+
+    // Cybersecurity / Security
+    if (has("security", "cybersecurity", "sql injection", "xss", "csrf", "jwt", "auth", "phishing")) {
+      return {
+        text: `**Core Web Security Principles:**\n\n• **SQL Injection Defense**: Always use parameterized queries / prepared statements (or ORMs) instead of string concatenation.\n• **XSS (Cross-Site Scripting)**: Sanitize user input and escape HTML before rendering.\n• **CSRF (Cross-Site Request Forgery)**: Implement Anti-CSRF tokens and \`SameSite=Lax/Strict\` cookie headers.\n• **JWT vs Session Auth**: JWTs are stateless cryptographically signed tokens; sessions store state on server/Redis.`,
+      };
+    }
+
+    // -------------------------------------------------------------
+    // SECTION 7: GREETINGS & CASUAL
+    // -------------------------------------------------------------
+    if (has("hi", "hello", "hey", "namaste", "good morning", "good evening", "how are you", "sup", "what's up")) {
+      return {
+        text: `Hello! 😊 It's great to connect with you!\n\nI can assist you with:\n1. **Shahad Pathan's Portfolio**: Projects (*Wriper AI*, *VidSnap AI*), internships, certifications, and contact details.\n2. **Software Engineering & Coding**: Python, React, Algorithms, Data Structures, Machine Learning, and System Design.\n\nWhat would you like to explore today?`,
         quickActions: [
           {
-            label: "🚀 Top Projects",
+            label: "🚀 Shahad's Top AI Projects",
             action: () => handleSend("What are Shahad's top AI projects?"),
+          },
+          {
+            label: "🏆 Certifications & Awards",
+            action: () => handleSend("What certifications does Shahad have?"),
           },
           {
             label: "💡 Explain Binary Search",
             action: () => handleSend("Explain how Binary Search works"),
           },
+        ],
+      };
+    }
+
+    // Jokes / Fun
+    if (has("joke", "funny", "laugh")) {
+      return {
+        text: `😄 Here's a classic developer joke for you:\n\n**Why do programmers prefer dark mode?**\n*Because light attracts bugs!* 🐛\n\n**Why do Java developers wear glasses?**\n*Because they don't C#!* ☕\n\nAsk me anything else about coding, algorithms, or Shahad's portfolio!`,
+      };
+    }
+
+    // Thanks / Appreciation
+    if (has("thanks", "thank you", "great", "awesome", "good job", "cool")) {
+      return {
+        text: `You're very welcome! 😊 Always happy to help. Let me know if you have any more questions about Shahad's work, code, or technical systems!`,
+        quickActions: [
           {
-            label: "⚡ Tech Stack",
-            action: () => handleSend("What is Shahad's tech stack?"),
+            label: "📬 Contact Shahad",
+            icon: "mail",
+            action: () => handleSend("How can I contact Shahad?"),
+          },
+          {
+            label: "📄 Download Resume",
+            action: () => handleSend("Can I download Shahad's resume?"),
           },
         ],
       };
     }
 
     // -------------------------------------------------------------
-    // 3. INTELLIGENT GENERAL FALLBACK ANSWER
+    // SECTION 8: CONTEXT-AWARE INTELLIGENT FALLBACK
     // -------------------------------------------------------------
     return {
-      text: `🤖 **Answering your question:**\n\nRegarding "${userQuery}":\n\nIn software engineering & computer science, this is commonly approached by breaking down the problem into modular components, choosing optimal data structures, and ensuring computational efficiency with clean algorithmic design.\n\n• For **coding & algorithms**: I can provide code snippets in Python, TypeScript, C++, or SQL.\n• For **systems & architecture**: I can explain database schemas, AI model pipelines, and web frameworks.\n• For **Shahad's portfolio**: You can ask about his projects (*Wriper AI*, *VidSnap AI*), technical skills, or internship availability!`,
+      text: `🤖 **Answering regarding: "${userQuery}"**\n\nIn computer engineering and software systems, queries like this can be analyzed through computational principles, modular architecture, and algorithmic design.\n\nHere are some relevant technical domains I can explain in depth:\n• **Shahad's Portfolio**: Projects (*Wriper AI*, *VidSnap AI*, *VimaBazzar*), internships (ISRO space tutor Agnirva), certifications (NHAI, IIT Guwahati, Oracle, IBM, AWS), and contact details.\n• **Algorithms & Data Structures**: Binary Search, QuickSort, Dynamic Programming, Two Sum, Graphs, Big-O.\n• **AI & Machine Learning**: Computer Vision, PyTorch, CNNs, Transformers, LLMs, RAG.\n• **Full-Stack & Cloud**: React 19, TypeScript, Next.js, PostgreSQL, Docker, and REST APIs.`,
       quickActions: [
         {
-          label: "Ask about AI & Python",
-          action: () => handleSend("What is PyTorch and how does it work?"),
-        },
-        {
-          label: "Ask about Databases",
-          action: () => handleSend("What is the difference between SQL and NoSQL?"),
-        },
-        {
-          label: "View Shahad's Projects",
+          label: "🚀 Top Projects",
+          icon: "project",
           action: () => handleSend("What are Shahad's top AI projects?"),
+        },
+        {
+          label: "⚡ Tech Stack",
+          icon: "skill",
+          action: () => handleSend("What is Shahad's tech stack?"),
+        },
+        {
+          label: "🏆 Certifications",
+          action: () => handleSend("What certifications does Shahad have?"),
+        },
+        {
+          label: "📬 Contact Info",
+          icon: "mail",
+          action: () => handleSend("How can I contact Shahad?"),
         },
       ],
     };
@@ -373,7 +630,7 @@ export function PortfolioChatbot() {
         sender: "bot",
         text: response.text,
         timestamp: "Just now",
-        quickActions: response.quickActions,
+        ...(response.quickActions ? { quickActions: response.quickActions } : {}),
       };
       setMessages((prev) => [...prev, botMsg]);
       setIsTyping(false);

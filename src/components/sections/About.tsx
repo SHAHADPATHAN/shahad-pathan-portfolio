@@ -475,11 +475,11 @@ export function About() {
                   </div>
                 </div>
 
-                <div>
-                  <h3 className="font-display text-2xl font-bold text-foreground tracking-tight">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground tracking-tight truncate">
                     {profile.name}
                   </h3>
-                  <p className="font-mono text-xs font-medium text-primary-bright">
+                  <p className="font-mono text-xs font-medium text-primary-bright truncate">
                     {profile.role} • AI &amp; Software
                   </p>
                 </div>
@@ -487,42 +487,42 @@ export function About() {
 
               {/* Fact Sheet Spec Table */}
               <dl className="mt-6 divide-y divide-border/60 rounded-2xl border border-border/70 bg-surface/50 p-4 text-xs">
-                <div className="flex items-center justify-between py-2.5">
-                  <dt className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 py-2.5">
+                  <dt className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground shrink-0">
                     <GraduationCap className="size-3.5 text-primary-bright" />
                     <span>Degree</span>
                   </dt>
-                  <dd className="font-medium text-foreground text-right">
+                  <dd className="font-medium text-foreground sm:text-right">
                     B.E. Computer Engineering (2024–2028)
                   </dd>
                 </div>
 
-                <div className="flex items-center justify-between py-2.5">
-                  <dt className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 py-2.5">
+                  <dt className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground shrink-0">
                     <Cpu className="size-3.5 text-cyan-400" />
                     <span>University</span>
                   </dt>
-                  <dd className="font-medium text-foreground text-right">
+                  <dd className="font-medium text-foreground sm:text-right">
                     Gujarat Technological University
                   </dd>
                 </div>
 
-                <div className="flex items-center justify-between py-2.5">
-                  <dt className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 py-2.5">
+                  <dt className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground shrink-0">
                     <MapPin className="size-3.5 text-emerald-400" />
                     <span>Location</span>
                   </dt>
-                  <dd className="font-medium text-foreground text-right">
+                  <dd className="font-medium text-foreground sm:text-right">
                     Mehsana, Gujarat, India
                   </dd>
                 </div>
 
-                <div className="flex items-center justify-between py-2.5">
-                  <dt className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 py-2.5">
+                  <dt className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground shrink-0">
                     <Sparkles className="size-3.5 text-purple-400" />
                     <span>Core Focus</span>
                   </dt>
-                  <dd className="font-semibold text-primary-bright text-right">
+                  <dd className="font-semibold text-primary-bright sm:text-right">
                     AI · Data Science · Full-Stack
                   </dd>
                 </div>
@@ -533,9 +533,9 @@ export function About() {
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="flex w-full items-center justify-between rounded-xl border border-border bg-surface-2/80 px-4 py-2.5 text-xs font-medium text-foreground transition-all hover:border-primary hover:bg-surface-2"
+                  className="flex w-full items-center justify-between gap-2 rounded-xl border border-border bg-surface-2/80 px-4 py-2.5 text-xs font-medium text-foreground transition-all hover:border-primary hover:bg-surface-2 active:scale-[0.99]"
                 >
-                  <span className="font-mono text-muted-foreground truncate">
+                  <span className="font-mono text-muted-foreground truncate text-left">
                     {profile.email}
                   </span>
                   <span className="inline-flex items-center gap-1 font-mono text-[11px] text-primary-bright font-semibold shrink-0">
@@ -555,7 +555,7 @@ export function About() {
 
                 <a
                   href="#contact"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary-bright hover:shadow-glow"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary-bright hover:shadow-glow active:scale-[0.99]"
                 >
                   <span>Initiate Contact</span>
                   <ArrowRight className="size-3.5" />
@@ -579,7 +579,12 @@ export function About() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {currentFocus.map((group, i) => {
               const Icon = focusIcons[group.id] ?? Brain;
-              const theme = focusColors[group.id] ?? focusColors.building;
+              const defaultTheme = {
+                border: "border-primary/40",
+                badge: "border-primary/30 bg-primary/10 text-primary-bright",
+                text: "text-primary-bright",
+              };
+              const theme = (focusColors as Record<string, typeof defaultTheme>)[group.id] ?? defaultTheme;
 
               return (
                 <ScrollReveal key={group.id} delay={0.06 * i} className="h-full">

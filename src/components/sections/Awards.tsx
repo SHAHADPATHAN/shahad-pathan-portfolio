@@ -16,12 +16,14 @@ import {
   Search,
   LayoutGrid,
   Maximize2,
+  Minimize2,
   ZoomIn,
   ZoomOut,
   RotateCcw,
   Download,
   SlidersHorizontal,
   FileCheck2,
+  ArrowRight,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import {
@@ -250,19 +252,175 @@ export function Awards() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"carousel" | "grid">("carousel");
   const [selectedAward, setSelectedAward] = useState<AwardItem | null>(null);
+  const [modalTab, setModalTab] = useState<"image" | "details">("image");
   const [verificationAward, setVerificationAward] = useState<AwardItem | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  const modalContainerRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const isDraggingScrollbarRef = useRef(false);
   const isDraggingCarouselRef = useRef(false);
   const dragStartXRef = useRef(0);
   const dragStartScrollLeftRef = useRef(0);
   const hasDraggedRef = useRef(false);
+
+  // Sync fullscreen state
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", onFullscreenChange);
+  }, []);
+
+  // Native fullscreen toggle on certificate modal
+  const handleToggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      modalContainerRef.current?.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen().catch(() => {});
+      setIsFullscreen(false);
+    }
+  };
+
+  // Open branded full-resolution window with Shahad Pathan's SP logo & verified badge
+  const openFullResolutionWindow = (item: AwardItem) => {
+    const newWindow = window.open("", "_blank");
+    if (!newWindow) return;
+
+    newWindow.document.write(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${item.title} — Shahad Pathan</title>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="icon" href="/favicon.png" type="image/png">
+        <link rel="icon" href="/favicon.ico">
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body {
+            background-color: #09090b;
+            color: #f4f4f5;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+          }
+          header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: rgba(18, 18, 22, 0.96);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(12px);
+          }
+          .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+          .sp-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ff6b00 0%, #ff3b00 100%);
+            color: #ffffff;
+            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            box-shadow: 0 4px 12px rgba(255, 107, 0, 0.35);
+          }
+          .title-area {
+            display: flex;
+            flex-direction: column;
+          }
+          .title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+          }
+          .org {
+            font-size: 12px;
+            color: #a1a1aa;
+            font-family: monospace;
+          }
+          .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          }
+          .btn {
+            background: #ff6b00;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.15s, transform 0.1s;
+          }
+          .btn:hover {
+            background: #ff8533;
+            transform: translateY(-1px);
+          }
+          .main-view {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            overflow: auto;
+          }
+          img {
+            max-width: 100%;
+            max-height: 86vh;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            object-fit: contain;
+          }
+        </style>
+      </head>
+      <body>
+        <header>
+          <div class="brand">
+            <span class="sp-badge">SP</span>
+            <div class="title-area">
+              <div class="title">${item.title}</div>
+              <div class="org">${item.organization} · Verified Credential</div>
+            </div>
+          </div>
+          <div class="actions">
+            <a class="btn" href="${item.image}" download="${item.id}-certificate.jpg">Download Certificate</a>
+          </div>
+        </header>
+        <div class="main-view">
+          <img src="${item.image}" alt="${item.title}" />
+        </div>
+      </body>
+      </html>
+    `);
+    newWindow.document.close();
+  };
 
   // Filter awards based on category & search query
   const filteredAwards = awards.filter((item) => {
@@ -393,6 +551,7 @@ export function Awards() {
   const handleView = (item: AwardItem) => {
     setSelectedAward(item);
     setZoomLevel(1);
+    setModalTab("image");
   };
 
   // Navigate next/prev in viewer modal
@@ -407,10 +566,10 @@ export function Awards() {
       if (direction === "prev") {
         const prevIdx =
           (currentIndex - 1 + filteredAwards.length) % filteredAwards.length;
-        setSelectedAward(filteredAwards[prevIdx]);
+        setSelectedAward(filteredAwards[prevIdx] ?? null);
       } else {
         const nextIdx = (currentIndex + 1) % filteredAwards.length;
-        setSelectedAward(filteredAwards[nextIdx]);
+        setSelectedAward(filteredAwards[nextIdx] ?? null);
       }
       setZoomLevel(1);
     },
@@ -741,6 +900,7 @@ export function Awards() {
             onClick={() => setSelectedAward(null)}
           >
             <motion.div
+              ref={modalContainerRef}
               initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.96, opacity: 0 }}
@@ -748,28 +908,65 @@ export function Awards() {
               onClick={(e) => e.stopPropagation()}
               className="relative flex h-[94vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-border/80 bg-surface/95 shadow-2xl backdrop-blur-xl lg:flex-row"
             >
-              {/* Modal Top Bar (Mobile Close & Header) */}
-              <div className="flex items-center justify-between border-b border-border p-4 lg:hidden">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="size-4 text-emerald-400" />
-                  <span className="font-mono text-xs font-semibold uppercase text-emerald-400">
-                    Official Certificate
-                  </span>
+              {/* Modal Top Bar (Mobile Close & Tab Navigation) */}
+              <div className="flex flex-col border-b border-border bg-surface-2/95 p-3 lg:hidden shrink-0 gap-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <ShieldCheck className="size-4 text-emerald-400 shrink-0" />
+                    <span className="font-mono text-xs font-semibold uppercase text-emerald-400 truncate">
+                      {selectedAward.badgeText ?? "Official Certificate"}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedAward(null)}
+                    aria-label="Close modal"
+                    className="flex size-8 items-center justify-center rounded-xl border border-border text-foreground hover:bg-surface active:scale-95 transition-all"
+                  >
+                    <X className="size-4" />
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedAward(null)}
-                  aria-label="Close modal"
-                  className="flex size-8 items-center justify-center rounded-xl border border-border text-foreground"
-                >
-                  <X className="size-4" />
-                </button>
+
+                {/* Mobile Segmented View Tabs */}
+                <div className="grid grid-cols-2 gap-1 rounded-xl bg-background/80 p-1 border border-border/80">
+                  <button
+                    type="button"
+                    onClick={() => setModalTab("image")}
+                    className={cn(
+                      "flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium transition-all",
+                      modalTab === "image"
+                        ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    <Eye className="size-3.5" />
+                    <span>Certificate View</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setModalTab("details")}
+                    className={cn(
+                      "flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-medium transition-all",
+                      modalTab === "details"
+                        ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    <BookmarkCheck className="size-3.5" />
+                    <span>Details &amp; Verify</span>
+                  </button>
+                </div>
               </div>
 
               {/* Left/Main: Certificate Image Viewer with Zoom & Controls */}
-              <div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-black/80 p-4 sm:p-6">
-                {/* Floating Image Zoom Controls Bar */}
-                <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 rounded-xl border border-white/15 bg-black/60 p-1 backdrop-blur-md">
+              <div
+                className={cn(
+                  "relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-black/90 p-3 sm:p-6 min-h-0",
+                  modalTab === "details" && "hidden lg:flex",
+                )}
+              >
+                {/* Floating Image Zoom & Fullscreen Controls Bar */}
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex items-center gap-1 sm:gap-1.5 rounded-xl border border-white/15 bg-black/60 p-1 backdrop-blur-md">
                   <button
                     type="button"
                     onClick={() => setZoomLevel((z) => Math.max(z - 0.25, 0.75))}
@@ -798,19 +995,30 @@ export function Awards() {
                   >
                     <RotateCcw className="size-3.5" />
                   </button>
-                  <a
-                    href={selectedAward.image}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Open Full Resolution"
+                  <button
+                    type="button"
+                    onClick={handleToggleFullscreen}
+                    title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen Mode"}
                     className="flex size-7 items-center justify-center rounded-lg text-white/80 transition-colors hover:bg-white/10 hover:text-white"
                   >
-                    <Maximize2 className="size-3.5" />
-                  </a>
+                    {isFullscreen ? (
+                      <Minimize2 className="size-3.5" />
+                    ) : (
+                      <Maximize2 className="size-3.5" />
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => openFullResolutionWindow(selectedAward)}
+                    title="Open Branded Certificate Tab"
+                    className="flex size-7 items-center justify-center rounded-lg text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                  >
+                    <ExternalLink className="size-3.5" />
+                  </button>
                 </div>
 
                 {/* Certificate High-Res Image with Zoom Transform */}
-                <div className="flex size-full items-center justify-center overflow-auto p-2">
+                <div className="flex size-full items-center justify-center overflow-auto p-2 sm:p-4">
                   <img
                     key={selectedAward.id}
                     src={selectedAward.image}
@@ -819,7 +1027,7 @@ export function Awards() {
                       transform: `scale(${zoomLevel})`,
                       transition: "transform 0.15s ease-out",
                     }}
-                    className="max-h-full max-w-full rounded-lg object-contain shadow-2xl ring-1 ring-white/10"
+                    className="max-h-full max-w-full rounded-lg object-contain shadow-2xl ring-1 ring-white/10 select-none"
                   />
                 </div>
 
@@ -828,7 +1036,7 @@ export function Awards() {
                   type="button"
                   onClick={() => handleModalNavigate("prev")}
                   aria-label="Previous certificate"
-                  className="absolute left-4 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all hover:scale-110 hover:bg-primary hover:text-primary-foreground active:scale-95"
+                  className="absolute left-3 sm:left-4 top-1/2 z-20 flex size-9 sm:size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all hover:scale-110 hover:bg-primary hover:text-primary-foreground active:scale-95"
                 >
                   <ChevronLeft className="size-5" />
                 </button>
@@ -836,14 +1044,34 @@ export function Awards() {
                   type="button"
                   onClick={() => handleModalNavigate("next")}
                   aria-label="Next certificate"
-                  className="absolute right-4 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all hover:scale-110 hover:bg-primary hover:text-primary-foreground active:scale-95"
+                  className="absolute right-3 sm:right-4 top-1/2 z-20 flex size-9 sm:size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all hover:scale-110 hover:bg-primary hover:text-primary-foreground active:scale-95"
                 >
                   <ChevronRight className="size-5" />
                 </button>
+
+                {/* Mobile Bottom Quick Switch Action Bar */}
+                <div className="absolute bottom-3 inset-x-3 z-20 flex items-center justify-between gap-2 lg:hidden">
+                  <span className="rounded-lg bg-black/75 px-2.5 py-1 font-mono text-[10px] text-white/90 backdrop-blur-md border border-white/10 truncate max-w-[55%]">
+                    {selectedAward.title}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setModalTab("details")}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-lg backdrop-blur-md active:scale-95"
+                  >
+                    <span>View Details</span>
+                    <ArrowRight className="size-3" />
+                  </button>
+                </div>
               </div>
 
               {/* Right: Certificate Information & Verification Metadata Panel */}
-              <div className="relative flex w-full flex-col justify-between overflow-y-auto border-t border-border bg-surface p-6 sm:p-8 lg:w-[420px] lg:border-t-0 lg:border-l">
+              <div
+                className={cn(
+                  "relative flex w-full flex-col justify-between overflow-y-auto border-t border-border bg-surface p-5 sm:p-8 lg:w-[420px] lg:border-t-0 lg:border-l flex-1 lg:flex-initial",
+                  modalTab === "image" && "hidden lg:flex",
+                )}
+              >
                 {/* Desktop Close Button */}
                 <button
                   type="button"
@@ -855,6 +1083,19 @@ export function Awards() {
                 </button>
 
                 <div>
+                  {/* Mobile Return to Certificate Banner */}
+                  <button
+                    type="button"
+                    onClick={() => setModalTab("image")}
+                    className="mb-4 flex w-full items-center justify-between rounded-xl border border-primary/40 bg-primary/10 p-3 text-xs text-primary-bright hover:bg-primary/15 transition-all lg:hidden"
+                  >
+                    <div className="flex items-center gap-2 font-semibold">
+                      <Eye className="size-4" />
+                      <span>Switch back to Certificate View</span>
+                    </div>
+                    <ArrowRight className="size-3.5" />
+                  </button>
+
                   {/* Verified Header Badge */}
                   <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-emerald-400">
                     <ShieldCheck className="size-4" />
@@ -983,9 +1224,7 @@ export function Awards() {
                   <div className="flex items-center gap-2">
                     <a
                       href={selectedAward.image}
-                      download
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      download={`${selectedAward.id}-certificate.jpg`}
                       className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary-bright"
                     >
                       <Download className="size-3.5" />

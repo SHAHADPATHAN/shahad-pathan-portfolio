@@ -53,7 +53,7 @@ export const awards: AwardItem[] = [
     description:
       "Participated in the National Road Safety Hackathon 2025 jointly organized by NHAI (Ministry of Road Transport & Highways) and HOAI, building AI and data solutions for safer intelligent highways.",
     credentialId: "NHAI-RSH-2025-SP",
-    verificationUrl: "https://nhai.gov.in",
+    verificationUrl: "https://unstop.com/certificate-preview/d47b9653-f084-46f2-a917-c910fcc38a4e",
     skills: ["AI Road Safety", "Computer Vision", "Intelligent Transportation", "IoT & Sensor Fusion", "NHAI"],
     image: "/certificates/nhai-road-safety-hackathon.jpg",
     featured: true,
@@ -70,7 +70,7 @@ export const awards: AwardItem[] = [
     description:
       "Certificate of participation in TechExpo organized by Indian Institute of Technology (IIT), Guwahati, representing Gujarat Technological University (GTU) with technical project exhibitions.",
     credentialId: "UNSTOP-IITG-TECHEXPO-SP",
-    verificationUrl: "https://unstop.com",
+    verificationUrl: "https://unstop.com/certificate-preview/2620a4b7-e723-42be-ac0f-85a7b60b9bdb",
     skills: ["Technical Exhibition", "Project Showcase", "IIT Guwahati", "Engineering Innovation", "Unstop"],
     image: "/certificates/iit-guwahati-tech-expo.jpg",
     featured: true,
@@ -155,7 +155,7 @@ export const awards: AwardItem[] = [
     description:
       "Student-level credential from Cisco Networking Academy verifying proficiency in network communication architectures, IPv4/IPv6 addressing, routing protocols, and troubleshooting.",
     credentialId: "CISCO-NET-BASICS-2026",
-    verificationUrl: "https://www.credly.com/organizations/cisco/badges",
+    verificationUrl: "https://www.credly.com/badges/78e55acc-dd92-41a0-bed5-d37d734b90ed",
     skills: ["Computer Networks", "IPv4 / IPv6", "Ethernet Protocols", "Router Configuration", "Network Security"],
     image: "/certificates/cisco-networking-basics.jpg",
     featured: false,
@@ -206,7 +206,7 @@ export const awards: AwardItem[] = [
     description:
       "National pledge and credential awarded by the Government of India (MeitY, ISEA & C-DAC) recognizing commitment to cyber vigilance, ethical computing, and threat prevention.",
     credentialId: "ISEA/PDG/STUDENT/068708",
-    verificationUrl: "https://www.isea.gov.in",
+    verificationUrl: "https://infosecawareness.in/validate-certificate?certid=ISEA/PDG/STUDENT/068708",
     skills: ["Cybersecurity", "Threat Awareness", "Digital Safety", "Information Security", "MeitY"],
     image: "/certificates/isea-cyber-security-pledge.jpg",
     featured: false,
@@ -223,7 +223,7 @@ export const awards: AwardItem[] = [
     description:
       "Successfully participated in the National Cyber Security Awareness initiative and secured 66% in the Email Security & Phishing Defense evaluation conducted by C-DAC and MeitY.",
     credentialId: "ISEA/NCSAM/EMLSEC/33731",
-    verificationUrl: "https://www.isea.gov.in",
+    verificationUrl: "https://infosecawareness.in/validate-certificate?certid=ISEA/NCSAM/EMLSEC/33731",
     skills: ["Email Security", "Phishing Prevention", "Authentication Protocols", "C-DAC", "Information Hygiene"],
     image: "/certificates/isea-email-security.jpg",
     featured: false,
