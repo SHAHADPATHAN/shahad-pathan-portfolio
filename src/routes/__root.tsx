@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 import appCss from "../styles.css?url";
 import { AmbientBackground } from "../components/motion/AmbientBackground";
@@ -141,6 +142,8 @@ function RootComponent() {
       <Outlet />
       {/* AI Assistant Chatbot (Floating right side) */}
       <PortfolioChatbot />
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </QueryClientProvider>
   );
 }
