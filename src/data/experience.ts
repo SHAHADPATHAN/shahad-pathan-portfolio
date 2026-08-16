@@ -23,7 +23,7 @@ export const educationList: ExperienceItem[] = [
     role: "Bachelor of Engineering (B.E.), Computer Engineering",
     organization: "Gujarat Technological University (GTU) - School of Engineering and Technology",
     period: "June 2024 – May 2028",
-    location: "Gujarat, India",
+    location: "Ahmedabad, Gujarat, India",
     type: "education",
     badgeLabel: "Degree Program",
     description:
@@ -40,7 +40,7 @@ export const educationList: ExperienceItem[] = [
     role: "S.S.C and H.S.C (Secondary & Higher Secondary)",
     organization: "Shri J.M. Chaudhary Sarvajanik Vidyalaya",
     period: "June 2020 – March 2024",
-    location: "Gujarat, India",
+    location: "Mehsana, Gujarat, India",
     type: "education",
     badgeLabel: "High School",
     description:

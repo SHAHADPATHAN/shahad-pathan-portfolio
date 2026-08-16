@@ -21,16 +21,16 @@ function JourneyCard({ item }: { item: ExperienceItem }) {
   return (
     <article
       className={cn(
-        "surface-panel glow-orange group relative flex h-[500px] w-[310px] sm:w-[350px] md:w-[370px] shrink-0 snap-start snap-always flex-col justify-between rounded-2xl p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-surface-2",
+        "surface-panel glow-orange group relative flex min-h-[520px] sm:min-h-[500px] w-[300px] xs:w-[320px] sm:w-[350px] md:w-[370px] shrink-0 snap-start snap-always flex-col justify-between rounded-2xl p-5 sm:p-7 transition-all duration-300 hover:-translate-y-1 hover:border-border-strong hover:bg-surface-2",
         isEducation && "border-primary/40 bg-surface/90",
       )}
     >
       {/* Top Section */}
-      <div>
+      <div className="flex flex-1 flex-col">
         {/* Header Badges */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-primary-bright transition-transform duration-300 group-hover:scale-105">
-            <Icon className="size-5" aria-hidden="true" />
+          <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-primary-bright transition-transform duration-300 group-hover:scale-105">
+            <Icon className="size-4.5 sm:size-5" aria-hidden="true" />
           </div>
 
           <div className="flex flex-wrap items-center justify-end gap-1.5">
@@ -41,8 +41,8 @@ function JourneyCard({ item }: { item: ExperienceItem }) {
         </div>
 
         {/* Role & Organization */}
-        <div className="mt-5">
-          <h3 className="font-display text-lg font-bold text-foreground sm:text-xl line-clamp-2">
+        <div className="mt-4 sm:mt-5">
+          <h3 className="font-display text-base sm:text-lg md:text-xl font-bold text-foreground line-clamp-2">
             {item.role}
           </h3>
           <p className="mt-1 font-mono text-xs font-semibold text-primary-bright">
@@ -64,12 +64,12 @@ function JourneyCard({ item }: { item: ExperienceItem }) {
         </div>
 
         {/* Description */}
-        <p className="mt-3.5 text-xs leading-relaxed text-muted-foreground line-clamp-2">
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground line-clamp-2">
           {item.description}
         </p>
 
         {/* Highlights */}
-        <ul className="mt-3.5 space-y-1.5 text-xs text-muted-foreground">
+        <ul className="mt-3 space-y-1.5 text-xs text-muted-foreground">
           {item.highlights.slice(0, 3).map((h, i) => (
             <li key={i} className="flex items-start gap-2">
               <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden="true" />
@@ -81,7 +81,7 @@ function JourneyCard({ item }: { item: ExperienceItem }) {
 
       {/* Bottom Skill Tags (Fixed to Bottom) */}
       {item.skills && item.skills.length > 0 ? (
-        <div className="mt-4 flex flex-wrap gap-1.5 border-t border-border/80 pt-3.5">
+        <div className="mt-4 flex flex-wrap gap-1.5 border-t border-border/80 pt-3">
           {item.skills.map((skill) => (
             <span
               key={skill}
@@ -149,7 +149,7 @@ export function Experience() {
             ref={scrollContainerRef}
             tabIndex={0}
             aria-label="Horizontal scrollable list of education and experience cards"
-            className="mt-10 flex gap-6 overflow-x-auto pb-6 pt-2 scroll-smooth snap-x snap-mandatory focus-visible:outline-none"
+            className="mt-10 flex items-stretch gap-6 overflow-x-auto pb-6 pt-2 scroll-smooth snap-x snap-mandatory focus-visible:outline-none"
             style={{
               scrollbarWidth: "thin",
               scrollbarColor: "rgba(255, 107, 0, 0.4) transparent",
