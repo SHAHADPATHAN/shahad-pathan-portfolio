@@ -5,10 +5,11 @@ import { BrandLogo } from "@/components/BrandLogo";
 import { SocialLinks } from "@/components/SocialLinks";
 import { profile } from "@/data/profile";
 import { navItems } from "@/data/navigation";
+import { useVisitorCount } from "@/hooks/useVisitorCount";
 
 export function Footer() {
   const [time, setTime] = useState<string>("");
-  const [views, setViews] = useState<number>(1);
+  const { count: views } = useVisitorCount();
 
   useEffect(() => {
     // 1. Real-time Indian Standard Time (IST) Clock
@@ -26,24 +27,6 @@ export function Footer() {
 
     updateTime();
     const interval = setInterval(updateTime, 1000);
-
-    // 2. Real Live Visitor Telemetry
-    try {
-      const STORAGE_KEY = "shahad_real_portfolio_views";
-      const stored = localStorage.getItem(STORAGE_KEY);
-      let count = stored ? Math.max(1, parseInt(stored, 10)) : 1;
-
-      const sessionCounted = sessionStorage.getItem("shahad_session_counted");
-      if (!sessionCounted) {
-        count += 1;
-        localStorage.setItem(STORAGE_KEY, count.toString());
-        sessionStorage.setItem("shahad_session_counted", "true");
-      }
-
-      setViews(count);
-    } catch {
-      setViews(1);
-    }
 
     return () => clearInterval(interval);
   }, []);
