@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   Copy,
   MessageSquare,
+  MessageCircle,
   ArrowUpRight,
   Loader2,
   AlertCircle,
@@ -151,36 +152,62 @@ export function Contact() {
                     </button>
                   </div>
 
-                  {/* Phone / Mobile */}
+                  {/* Phone / Mobile / WhatsApp */}
                   <div className="group relative flex items-center justify-between rounded-2xl border border-border bg-surface p-4 transition-all hover:border-primary/50 hover:bg-surface-2">
                     <div className="flex items-center gap-3.5">
                       <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-primary-bright">
                         <Phone className="size-5" aria-hidden="true" />
                       </div>
                       <div>
-                        <p className="font-mono text-[10px] uppercase text-muted-foreground">
-                          Mobile &amp; WhatsApp
+                        <p className="font-mono text-[10px] uppercase text-muted-foreground flex items-center gap-1.5">
+                          <span>Mobile &amp; WhatsApp</span>
+                          <span className="inline-block size-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         </p>
                         <a
-                          href={`tel:${profile.phone}`}
-                          className="font-medium text-foreground transition-colors hover:text-primary-bright text-xs sm:text-sm"
+                          href={profile.whatsapp}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          title="Open WhatsApp chat with Shahad"
+                          className="group/num inline-flex items-center gap-1 font-medium text-foreground transition-colors hover:text-primary-bright text-xs sm:text-sm"
                         >
                           {profile.phone}
+                          <ArrowUpRight className="size-3 text-muted-foreground transition-transform group-hover/num:translate-x-0.5 group-hover/num:-translate-y-0.5" />
                         </a>
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleCopy(profile.phone, "phone")}
-                      aria-label="Copy phone number"
-                      className="flex size-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
-                    >
-                      {copiedPhone ? (
-                        <CheckCircle2 className="size-4 text-emerald-400" />
-                      ) : (
-                        <Copy className="size-4" />
-                      )}
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <a
+                        href={profile.whatsapp}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        aria-label="Chat on WhatsApp"
+                        title="Chat on WhatsApp"
+                        className="flex size-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 transition-colors hover:border-emerald-500 hover:bg-emerald-500/20"
+                      >
+                        <MessageCircle className="size-4" />
+                      </a>
+                      <a
+                        href={`tel:${profile.phone}`}
+                        aria-label="Direct phone call"
+                        title="Direct phone call"
+                        className="flex size-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+                      >
+                        <Phone className="size-3.5" />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy(profile.phone, "phone")}
+                        aria-label="Copy phone number"
+                        title="Copy phone number"
+                        className="flex size-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+                      >
+                        {copiedPhone ? (
+                          <CheckCircle2 className="size-4 text-emerald-400" />
+                        ) : (
+                          <Copy className="size-4" />
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   {/* Location */}

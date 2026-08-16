@@ -22,6 +22,7 @@ export const profile = {
   graduationYear: "2028",
   email: "sahadpathan2697@gmail.com",
   phone: "+919913031752",
+  whatsapp: "https://wa.me/919913031752",
   github: "https://github.com/SHAHADPATHAN",
   linkedin: "https://www.linkedin.com/in/shahad-pathan/",
   website: "https://shahadpathan.vercel.app",
