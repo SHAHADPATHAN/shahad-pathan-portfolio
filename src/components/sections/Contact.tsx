@@ -2,6 +2,8 @@ import { useState, type FormEvent } from "react";
 import {
   Mail,
   Phone,
+  PhoneCall,
+  Smartphone,
   MapPin,
   Send,
   CheckCircle2,
@@ -11,6 +13,7 @@ import {
   ArrowUpRight,
   Loader2,
   AlertCircle,
+  X,
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/sections/SectionHeading";
@@ -25,6 +28,7 @@ export function Contact() {
   const [message, setMessage] = useState("");
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
+  const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -153,26 +157,38 @@ export function Contact() {
                   </div>
 
                   {/* Phone / Mobile / WhatsApp */}
-                  <div className="group relative flex items-center justify-between rounded-2xl border border-border bg-surface p-4 transition-all hover:border-primary/50 hover:bg-surface-2">
+                  <div
+                    onClick={() => setIsPhoneModalOpen(true)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setIsPhoneModalOpen(true);
+                      }
+                    }}
+                    className="group relative flex cursor-pointer items-center justify-between rounded-2xl border border-border bg-surface p-4 transition-all hover:border-primary/50 hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  >
                     <div className="flex items-center gap-3.5">
-                      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-primary-bright">
-                        <Phone className="size-5" aria-hidden="true" />
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-primary-bright transition-transform duration-200 group-hover:scale-105">
+                        <Smartphone className="size-5" aria-hidden="true" />
                       </div>
                       <div>
                         <p className="font-mono text-[10px] uppercase text-muted-foreground flex items-center gap-1.5">
                           <span>Mobile &amp; WhatsApp</span>
                           <span className="inline-block size-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         </p>
-                        <a
-                          href={profile.whatsapp}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                          title="Open WhatsApp chat with Shahad"
-                          className="group/num inline-flex items-center gap-1 font-medium text-foreground transition-colors hover:text-primary-bright text-xs sm:text-sm"
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setIsPhoneModalOpen(true);
+                          }}
+                          className="group/num inline-flex items-center gap-1 font-medium text-foreground transition-colors hover:text-primary-bright text-xs sm:text-sm text-left"
                         >
                           {profile.phone}
                           <ArrowUpRight className="size-3 text-muted-foreground transition-transform group-hover/num:translate-x-0.5 group-hover/num:-translate-y-0.5" />
-                        </a>
+                        </button>
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5">
@@ -180,26 +196,31 @@ export function Contact() {
                         href={profile.whatsapp}
                         target="_blank"
                         rel="noreferrer noopener"
+                        onClick={(e) => e.stopPropagation()}
                         aria-label="Chat on WhatsApp"
                         title="Chat on WhatsApp"
-                        className="flex size-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 transition-colors hover:border-emerald-500 hover:bg-emerald-500/20"
+                        className="flex size-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 transition-all hover:scale-105 hover:border-emerald-500 hover:bg-emerald-500/20"
                       >
                         <MessageCircle className="size-4" />
                       </a>
                       <a
                         href={`tel:${profile.phone}`}
+                        onClick={(e) => e.stopPropagation()}
                         aria-label="Direct phone call"
                         title="Direct phone call"
-                        className="flex size-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+                        className="flex size-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-all hover:scale-105 hover:border-primary hover:text-foreground"
                       >
-                        <Phone className="size-3.5" />
+                        <PhoneCall className="size-3.5" />
                       </a>
                       <button
                         type="button"
-                        onClick={() => handleCopy(profile.phone, "phone")}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCopy(profile.phone, "phone");
+                        }}
                         aria-label="Copy phone number"
                         title="Copy phone number"
-                        className="flex size-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+                        className="flex size-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-all hover:scale-105 hover:border-primary hover:text-foreground"
                       >
                         {copiedPhone ? (
                           <CheckCircle2 className="size-4 text-emerald-400" />
@@ -399,6 +420,152 @@ export function Contact() {
           </ScrollReveal>
         </div>
       </Container>
+
+      {/* Mobile / Device Contact Choice Modal */}
+      {isPhoneModalOpen ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="contact-choice-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-in fade-in duration-200"
+          onClick={() => setIsPhoneModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-border/80 bg-surface/95 p-6 sm:p-7 shadow-2xl backdrop-blur-2xl animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header Accent Glow */}
+            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-500 via-primary to-emerald-500" />
+
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={() => setIsPhoneModalOpen(false)}
+              aria-label="Close dialog"
+              className="absolute top-4 right-4 flex size-8 items-center justify-center rounded-xl border border-border bg-surface text-muted-foreground transition-colors hover:border-primary hover:text-foreground active:scale-95"
+            >
+              <X className="size-4" />
+            </button>
+
+            {/* Modal Title & Header */}
+            <div className="flex items-center gap-3">
+              <div className="flex size-11 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                <Smartphone className="size-5" />
+              </div>
+              <div>
+                <h3 id="contact-choice-title" className="font-display text-lg font-bold text-foreground">
+                  Contact Preference
+                </h3>
+                <p className="font-mono text-xs text-muted-foreground">
+                  Shahad Pathan • {profile.phone}
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+              Choose your preferred communication method to connect directly with Shahad:
+            </p>
+
+            {/* Options List */}
+            <div className="mt-5 space-y-3">
+              {/* Option 1: WhatsApp */}
+              <a
+                href={profile.whatsapp}
+                target="_blank"
+                rel="noreferrer noopener"
+                onClick={() => setIsPhoneModalOpen(false)}
+                className="group flex items-center justify-between rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-4 transition-all hover:border-emerald-500 hover:bg-emerald-500/15 hover:shadow-glow-emerald"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 transition-transform group-hover:scale-105">
+                    <MessageCircle className="size-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-foreground group-hover:text-emerald-400">
+                        Chat on WhatsApp
+                      </span>
+                      <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 font-mono text-[9px] font-semibold text-emerald-400 uppercase tracking-wider">
+                        Recommended
+                      </span>
+                    </div>
+                    <p className="font-mono text-[11px] text-muted-foreground">
+                      Instant reply • {profile.phone}
+                    </p>
+                  </div>
+                </div>
+                <ArrowUpRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-emerald-400" />
+              </a>
+
+              {/* Option 2: Direct Phone Call */}
+              <a
+                href={`tel:${profile.phone}`}
+                onClick={() => setIsPhoneModalOpen(false)}
+                className="group flex items-center justify-between rounded-2xl border border-border bg-surface p-4 transition-all hover:border-primary hover:bg-surface-2 hover:shadow-glow"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-primary-bright transition-transform group-hover:scale-105">
+                    <PhoneCall className="size-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-foreground group-hover:text-primary-bright">
+                        Direct Phone Call
+                      </span>
+                      <span className="rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-semibold text-primary-bright uppercase tracking-wider">
+                        Voice Line
+                      </span>
+                    </div>
+                    <p className="font-mono text-[11px] text-muted-foreground">
+                      Standard cellular call • {profile.phone}
+                    </p>
+                  </div>
+                </div>
+                <ArrowUpRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary-bright" />
+              </a>
+
+              {/* Option 3: Copy Number */}
+              <button
+                type="button"
+                onClick={() => handleCopy(profile.phone, "phone")}
+                className="group flex w-full items-center justify-between rounded-2xl border border-border bg-surface p-4 text-left transition-all hover:border-border-strong hover:bg-surface-2"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-muted-foreground transition-transform group-hover:scale-105 group-hover:text-foreground">
+                    {copiedPhone ? (
+                      <CheckCircle2 className="size-5 text-emerald-400" />
+                    ) : (
+                      <Copy className="size-5" />
+                    )}
+                  </div>
+                  <div>
+                    <span className="text-sm font-semibold text-foreground">
+                      {copiedPhone ? "Phone Number Copied!" : "Copy Phone Number"}
+                    </span>
+                    <p className="font-mono text-[11px] text-muted-foreground">
+                      {profile.phone}
+                    </p>
+                  </div>
+                </div>
+                <span className="font-mono text-xs text-muted-foreground group-hover:text-foreground">
+                  {copiedPhone ? "Copied" : "Copy"}
+                </span>
+              </button>
+            </div>
+
+            <div className="mt-5 flex items-center justify-between border-t border-border/80 pt-3 text-[11px] text-muted-foreground">
+              <span>Available 9:00 AM – 8:00 PM IST</span>
+              <button
+                type="button"
+                onClick={() => setIsPhoneModalOpen(false)}
+                className="text-primary-bright hover:underline font-mono"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }
