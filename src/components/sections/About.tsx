@@ -184,7 +184,7 @@ export function About() {
           />
 
           {/* Interactive Tab Switcher */}
-          <div className="flex items-center rounded-xl border border-border bg-surface p-1 shadow-sm shrink-0">
+          <div className="flex items-center rounded-xl border border-border bg-surface p-1 shadow-sm shrink-0 self-start sm:self-auto">
             <button
               type="button"
               onClick={() => setActiveTab("story")}

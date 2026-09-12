@@ -68,16 +68,17 @@ export function FeaturedProjects() {
             ref={scrollContainerRef}
             tabIndex={0}
             aria-label="Horizontal scrollable list of projects and systems"
-            className="mt-10 flex gap-6 overflow-x-auto pb-6 pt-2 scroll-smooth snap-x snap-mandatory focus-visible:outline-none"
+            className="scrollbar-portfolio mt-10 flex gap-5 sm:gap-6 overflow-x-auto pb-6 pt-2 scroll-smooth snap-x snap-mandatory focus-visible:outline-none"
             style={{
               scrollbarWidth: "thin",
-              scrollbarColor: "rgba(255, 107, 0, 0.4) transparent",
+              scrollbarColor: "rgba(255, 107, 0, 0.45) rgba(255, 255, 255, 0.04)",
+              WebkitOverflowScrolling: "touch",
             }}
           >
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="h-[530px] w-[310px] sm:w-[350px] md:w-[370px] shrink-0 snap-start snap-always"
+                className="h-[530px] w-[86vw] max-w-[320px] xs:max-w-[340px] sm:w-[350px] md:w-[370px] shrink-0 snap-start snap-always"
               >
                 <ProjectCard project={project} />
               </div>

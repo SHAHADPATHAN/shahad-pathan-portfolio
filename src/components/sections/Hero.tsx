@@ -41,7 +41,7 @@ export function Hero() {
             {profile.eyebrow}
           </motion.p>
 
-          <h1 className="mt-5 text-[2.5rem] leading-[1.05] font-bold sm:text-5xl lg:text-[4.25rem]">
+          <h1 className="mt-5 text-[2.15rem] xs:text-[2.5rem] leading-[1.08] font-bold sm:text-5xl lg:text-[4.25rem]">
             <AnimatedText text="Hi, I'm" delay={0.15} className="text-foreground" />{" "}
             <AnimatedText text="Shahad Pathan." delay={0.3} className="text-primary-bright" />
           </h1>
