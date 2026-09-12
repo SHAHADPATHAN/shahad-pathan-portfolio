@@ -28,11 +28,19 @@ export function Hero() {
       />
       <div
         aria-hidden="true"
-        className="absolute -top-40 left-1/4 -z-10 size-[520px] rounded-full bg-primary/10 blur-[130px]"
+        className="pointer-events-none absolute -top-40 left-1/4 -z-10 size-[480px] rounded-full opacity-60"
+        style={{
+          background: "radial-gradient(circle, var(--color-primary) 0%, transparent 70%)",
+          opacity: 0.12,
+        }}
       />
       <div
         aria-hidden="true"
-        className="absolute top-1/2 -right-20 -z-10 size-[420px] rounded-full bg-primary/6 blur-[110px]"
+        className="pointer-events-none absolute top-1/2 -right-20 -z-10 size-[380px] rounded-full opacity-60"
+        style={{
+          background: "radial-gradient(circle, var(--color-primary) 0%, transparent 70%)",
+          opacity: 0.09,
+        }}
       />
 
       <Container className="relative z-10 grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">

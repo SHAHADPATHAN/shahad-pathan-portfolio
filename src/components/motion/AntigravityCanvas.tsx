@@ -29,6 +29,8 @@ export function AntigravityCanvas() {
     let height = (canvas.height = canvas.parentElement?.clientHeight || window.innerHeight);
 
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.innerWidth < 768 || "ontouchstart" in window;
+    let isVisible = true;
 
     // Detect if dark or light mode
     const isLightMode = () => document.documentElement.classList.contains("light");
@@ -37,10 +39,11 @@ export function AntigravityCanvas() {
     const mouse = {
       x: -1000,
       y: -1000,
-      radius: 140,
+      radius: isMobile ? 80 : 130,
     };
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (isMobile) return;
       const rect = canvas.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
       mouse.y = e.clientY - rect.top;
@@ -57,7 +60,7 @@ export function AntigravityCanvas() {
     // Handle high DPI and resizing
     const handleResize = () => {
       if (!canvas || !canvas.parentElement) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5); // Cap at 1.5 to avoid GPU memory explosion
       width = canvas.parentElement.clientWidth;
       height = canvas.parentElement.clientHeight;
       canvas.width = width * dpr;
@@ -68,8 +71,18 @@ export function AntigravityCanvas() {
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    // Generate antigravity particles
-    const particleCount = Math.min(Math.floor((width * height) / 12000), 55);
+    // IntersectionObserver: PAUSE canvas render loop when Hero is scrolled out of view!
+    // This saves massive CPU/GPU resources on lower-end devices while browsing other sections.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry?.isIntersecting ?? true;
+      },
+      { threshold: 0.05 },
+    );
+    observer.observe(canvas);
+
+    // Generate balanced antigravity particles (fewer on mobile for speed)
+    const particleCount = isMobile ? 16 : Math.min(Math.floor((width * height) / 18000), 38);
     const particles: Particle[] = [];
 
     const colorsDark = [
@@ -87,59 +100,64 @@ export function AntigravityCanvas() {
     ];
 
     for (let i = 0; i < particleCount; i++) {
-      const baseAlpha = Math.random() * 0.45 + 0.25;
+      const baseAlpha = Math.random() * 0.35 + 0.2;
       const colorSet = isLightMode() ? colorsLight : colorsDark;
       const baseColor = colorSet[Math.floor(Math.random() * colorSet.length)] || "rgba(255, 107, 0, ";
 
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        // Antigravity drift: slight upward tendency and floating lateral oscillation
-        vx: (Math.random() - 0.5) * 0.45,
-        vy: -(Math.random() * 0.4 + 0.15),
-        radius: Math.random() * 1.8 + 1.2,
-        baseRadius: Math.random() * 1.8 + 1.2,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: -(Math.random() * 0.3 + 0.12),
+        radius: Math.random() * 1.5 + 1,
+        baseRadius: Math.random() * 1.5 + 1,
         alpha: baseAlpha,
         baseAlpha,
         color: baseColor,
         floatOffset: Math.random() * Math.PI * 2,
-        floatSpeed: Math.random() * 0.02 + 0.01,
+        floatSpeed: Math.random() * 0.015 + 0.008,
       });
     }
 
     let time = 0;
+    const maxConnectDistSq = 110 * 110;
 
     // Animation render loop
     const render = () => {
-      time += 0.02;
+      if (!isVisible) {
+        // Paused when scrolled down
+        animationFrameId = requestAnimationFrame(render);
+        return;
+      }
+
+      time += 0.018;
       ctx.clearRect(0, 0, width, height);
 
       const light = isLightMode();
-      const maxConnectDistance = 115;
 
-      // Draw particle connections (Antigravity force lines)
-      for (let i = 0; i < particles.length; i++) {
-        const pi = particles[i];
-        if (!pi) continue;
+      // Only draw particle connection lines on desktop (skip on mobile to save GPU)
+      if (!isMobile) {
+        for (let i = 0; i < particles.length; i++) {
+          const pi = particles[i];
+          if (!pi) continue;
 
-        for (let j = i + 1; j < particles.length; j++) {
-          const pj = particles[j];
-          if (!pj) continue;
+          for (let j = i + 1; j < particles.length; j++) {
+            const pj = particles[j];
+            if (!pj) continue;
 
-          const dx = pi.x - pj.x;
-          const dy = pi.y - pj.y;
-          const dist = Math.hypot(dx, dy);
+            const dx = pi.x - pj.x;
+            const dy = pi.y - pj.y;
+            const distSq = dx * dx + dy * dy;
 
-          if (dist < maxConnectDistance) {
-            const lineAlpha = (1 - dist / maxConnectDistance) * (light ? 0.12 : 0.18);
-            ctx.beginPath();
-            ctx.moveTo(pi.x, pi.y);
-            ctx.lineTo(pj.x, pj.y);
-            ctx.strokeStyle = light
-              ? `rgba(255, 107, 0, ${lineAlpha})`
-              : `rgba(255, 107, 0, ${lineAlpha})`;
-            ctx.lineWidth = 0.75;
-            ctx.stroke();
+            if (distSq < maxConnectDistSq) {
+              const lineAlpha = (1 - distSq / maxConnectDistSq) * (light ? 0.1 : 0.14);
+              ctx.beginPath();
+              ctx.moveTo(pi.x, pi.y);
+              ctx.lineTo(pj.x, pj.y);
+              ctx.strokeStyle = `rgba(255, 107, 0, ${lineAlpha})`;
+              ctx.lineWidth = 0.6;
+              ctx.stroke();
+            }
           }
         }
       }
@@ -150,20 +168,21 @@ export function AntigravityCanvas() {
         if (!p) continue;
 
         if (!isReduced) {
-          // Antigravity upward floating with subtle sine-wave drift
-          p.x += p.vx + Math.sin(time + p.floatOffset) * 0.25;
+          p.x += p.vx + Math.sin(time + p.floatOffset) * 0.2;
           p.y += p.vy;
 
-          // Mouse Antigravity Repulsion Field
-          const mdx = p.x - mouse.x;
-          const mdy = p.y - mouse.y;
-          const mdist = Math.hypot(mdx, mdy);
+          if (!isMobile) {
+            const mdx = p.x - mouse.x;
+            const mdy = p.y - mouse.y;
+            const mdistSq = mdx * mdx + mdy * mdy;
 
-          if (mdist < mouse.radius && mdist > 0) {
-            const force = (mouse.radius - mdist) / mouse.radius;
-            const angle = Math.atan2(mdy, mdx);
-            p.x += Math.cos(angle) * force * 3.2;
-            p.y += Math.sin(angle) * force * 3.2;
+            if (mdistSq < mouse.radius * mouse.radius && mdistSq > 0) {
+              const mdist = Math.sqrt(mdistSq);
+              const force = (mouse.radius - mdist) / mouse.radius;
+              const angle = Math.atan2(mdy, mdx);
+              p.x += Math.cos(angle) * force * 2.8;
+              p.y += Math.sin(angle) * force * 2.8;
+            }
           }
 
           // Wrap edges smoothly
@@ -175,19 +194,11 @@ export function AntigravityCanvas() {
           if (p.x > width + 10) p.x = -10;
         }
 
-        // Render particle with glowing aura
+        // Render particle dot
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = `${p.color}${p.alpha})`;
         ctx.fill();
-
-        // Subtle glow halo on larger particles
-        if (p.radius > 2.2) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius * 2.4, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 107, 0, ${p.alpha * 0.18})`;
-          ctx.fill();
-        }
       }
 
       animationFrameId = requestAnimationFrame(render);
@@ -197,6 +208,7 @@ export function AntigravityCanvas() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
@@ -207,7 +219,7 @@ export function AntigravityCanvas() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 size-full opacity-80 transition-opacity duration-500"
+      className="pointer-events-none absolute inset-0 z-0 size-full opacity-75 transition-opacity duration-500 will-change-transform"
     />
   );
 }

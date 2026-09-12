@@ -255,3 +255,34 @@ html.light,
 .scrollbar-portfolio::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 107, 0, 0.75);
 }
+
+/* Hardware Acceleration & Mobile Performance Enhancements */
+.transform-gpu {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  /* Prevent horizontal micro-overflows on mobile */
+  html, body {
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Reduce costly blur overhead on budget mobile GPUs */
+  .glow-orange {
+    box-shadow: 0 8px 24px -10px var(--glow);
+  }
+
+  /* Smooth tap behavior without delay */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
