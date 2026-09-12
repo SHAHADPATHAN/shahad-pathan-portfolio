@@ -62,6 +62,120 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    id: "prism-ai",
+    slug: "prism-ai",
+    title: "PRISM — Predictive Infrastructure & Risk Monitoring",
+    shortDescription:
+      "National-scale AI infrastructure intelligence platform combining Dual XGBoost, TreeSHAP explainability, and GIS analytics for MoSPI (Smart India Hackathon 2026).",
+    description:
+      "PRISM is an enterprise predictive intelligence and infrastructure governance platform developed for the Ministry of Statistics and Programme Implementation (MoSPI) under Smart India Hackathon 2026. It transforms unstructured monthly Flash Reports and PAIMANA datasets into explainable risk forecasts, dynamic S-curve early warnings, and authoritative geospatial monitoring across 1,981 central sector projects totaling ₹42.78+ Lakh Crore.",
+    category: "AI",
+    technologies: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "FastAPI",
+      "Python",
+      "XGBoost",
+      "TreeSHAP",
+      "Leaflet GIS",
+      "PostgreSQL",
+      "Tailwind CSS",
+    ],
+    image: "/projects/prism-ai.png",
+    imageAlt: "PRISM Geospatial Infrastructure Intelligence Map showing Pan-India project telemetry and risk dossiers",
+    gallery: [
+      {
+        src: "/projects/prism-ai.png",
+        alt: "PRISM Geospatial Infrastructure Intelligence Map with Pan-India 1,981 infrastructure projects and Kadapa Airport project dossier",
+        caption: "PRISM Geospatial Infrastructure Intelligence Map (MoSPI PAIMANA April 2026 Baseline) with real-time risk tiers and project dossiers.",
+      },
+    ],
+    featured: true,
+    githubUrl: "https://github.com/vedant1506/SIH-26",
+    problem:
+      "India's central sector monitors 1,981+ capital projects costing ₹42.78+ Lakh Crore. Traditional governance relied on static, lagging 160-page PDF Flash Reports and retrospective reviews, causing multi-month schedule slips, unnoticed cost overruns, and coordinate errors to compound undetected across ministries.",
+    solution:
+      "Engineered an enterprise predictive intelligence platform featuring dual XGBoost regression/classification models with TreeSHAP factor attributions, automated ephemeral PDF ingestion of MoSPI Table 6 in under 40s, dynamic S-curve construction tracking, and an authoritative Survey of India compliant GIS engine with 100% boundary containment.",
+    features: [
+      "Dual-Engine Machine Learning: Predicts timeline slippage (months) and cost escalation (₹ Cr) with TreeSHAP root-cause feature attributions.",
+      "Dynamic S-Curve & Multi-Trigger Early Warning: Logistic mathematical modeling tracking progress gaps against financial burn divergence with stagnation guardrails.",
+      "Authoritative Geolocation Engine: Resolves 100% of 1,981 projects to physical sites with zero false coordinate dumps and 100% state boundary containment.",
+      "Autonomous Ephemeral PDF Ingestion: Ingests 160+ page MoSPI Flash Reports in volatile RAM, extracting Pan-India Table 6 in under 40 seconds with zero database contamination.",
+      "Intelligent Document Vault & SHA-256 Audit: Secure document lifecycle management with OCR/NLP metadata extraction and interactive preview.",
+      "Citizen Ground Grievance Portal: Spatial crowdsourced feedback with geotagged photo evidence and contractor red-flag triangulation.",
+    ],
+    architecture: {
+      summary:
+        "Decoupled n-tier architecture pairing a Next.js 16 (Turbopack) client presentation layer with an asynchronous FastAPI ASGI microservices backend and dual PostgreSQL/SQLite persistence.",
+      nodes: [
+        {
+          layer: "frontend",
+          title: "Executive Presentation Tier",
+          technologies: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS v4", "Leaflet GIS", "Recharts"],
+          description: "GIS command map, interactive risk heatmaps, dynamic S-curve visualizer, and action SLA tracker.",
+        },
+        {
+          layer: "api",
+          title: "FastAPI ASGI Gateway",
+          technologies: ["FastAPI", "Starlette", "Pydantic v2", "JWT Bearer Auth", "RBAC"],
+          description: "High-throughput asynchronous endpoints with role-based governance for ministry officers and analysts.",
+        },
+        {
+          layer: "ai-model",
+          title: "Dual XGBoost & Explainable AI",
+          technologies: ["XGBoost 2.0", "TreeSHAP", "NumPy", "Pandas 2.2"],
+          description: "Delay classification, cost regressor, and Tree-based Shapley Additive Explanations for each project.",
+        },
+        {
+          layer: "backend",
+          title: "Document & Ephemeral Engine",
+          technologies: ["PyMuPDF (fitz)", "pdfplumber", "Shapely GIS", "SQLite Edge"],
+          description: "Volatile RAM table extraction, SHA-256 checksum hashing, and spatial polygon boundary verification.",
+        },
+        {
+          layer: "database",
+          title: "Persistent Enterprise Storage",
+          technologies: ["PostgreSQL", "PgBouncer", "SQLAlchemy 2.0", "SQLite Pre-seeded DB"],
+          description: "Deterministic cross-machine pre-seeded database ensuring 100% parity across 1,981 projects.",
+        },
+        {
+          layer: "external",
+          title: "Interoperability Integrations",
+          technologies: ["MoSPI PAIMANA", "PM GatiShakti", "GeM", "PFMS", "CRIS"],
+          description: "Centralized synchronization health monitoring across national infrastructure data standards.",
+        },
+      ],
+    },
+    challenges: [
+      {
+        challenge: "Extracting complex tabular data across 160+ page unstructured government Flash Report PDFs without database pollution.",
+        solution: "Engineered an ephemeral parsing service using PyMuPDF and pdfplumber in volatile RAM, extracting and normalizing Table 6 in under 40 seconds before committing verified canonical rows.",
+      },
+      {
+        challenge: "Eliminating black-box distrust in government capital allocation and executive briefings.",
+        solution: "Integrated TreeSHAP factor attribution vectors for every prediction, pinpointing exact percentage contributions for contractor velocity, land acquisition, and financial burn.",
+      },
+      {
+        challenge: "Fixing geospatial inaccuracies and false coordinate dumps in national infrastructure mapping.",
+        solution: "Created a 23-stage Survey of India spatial validation test suite using Shapely point-in-polygon checks, ensuring 100% inland boundary containment.",
+      },
+    ],
+    results: [
+      "Built for Smart India Hackathon 2026 (Problem Statement: SIH26103) for Ministry of Statistics and Programme Implementation (MoSPI).",
+      "Processed and predicted risk metrics across 1,981 central infrastructure projects totaling ₹42.78+ Lakh Crore.",
+      "Validated 100% list-to-detail and risk tier consistency across all 1,981 projects with automated audit scripts.",
+    ],
+    lessonsLearned: [
+      "Mission-critical public sector systems require explainability and deterministic reproducibility over unconstrained black-box models.",
+      "High-concurrency connection pooling (PgBouncer) and ephemeral RAM parsers prevent server crashes during heavy government report briefings.",
+    ],
+    futureImprovements: [
+      "Real-time satellite imagery change detection via Sentinel-2 and ISRO Cartosat feeds.",
+      "Automated generative executive ministry briefing memos synthesized via localized LLM pipelines.",
+    ],
+  },
+  {
     id: "wriper-ai",
     slug: "wriper-ai",
     title: "Wriper — AI Background Remover",
@@ -441,9 +555,9 @@ export const getRelatedProjects = (currentSlug: string, limit = 2): Project[] =>
   return combined.slice(0, limit);
 };
 
-export const featuredProjects = () => projects.slice(0, 3);
+export const featuredProjects = () => projects.filter((p) => p.featured);
 
-export const otherProjects = () => projects.slice(3);
+export const otherProjects = () => projects.filter((p) => !p.featured);
 
 export const usedCategories = (): ProjectCategory[] =>
   projectCategories.filter((c) => projects.some((p) => p.category === c));

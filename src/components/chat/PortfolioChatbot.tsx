@@ -28,9 +28,9 @@ interface ChatMessage {
   id: string;
   sender: "bot" | "user";
   text: string;
-  thoughtProcess?: string;
+  thoughtProcess?: string | undefined;
   timestamp: string;
-  quickActions?: AIInferenceResult["quickActions"];
+  quickActions?: AIInferenceResult["quickActions"] | undefined;
 }
 
 export type ModelFilterMode = "all" | "gemini" | "llama" | "qwen" | "chatgpt";
@@ -128,7 +128,7 @@ function FormattedMessageText({ text }: { text: string }) {
     segments.push({
       type: "code",
       language: match[1] || "text",
-      content: match[2].trimEnd(),
+      content: (match[2] ?? "").trimEnd(),
     });
     lastIndex = match.index + match[0].length;
   }

@@ -23,14 +23,14 @@ import {
 
 export interface AIInferenceResult {
   text: string;
-  thoughtProcess?: string;
+  thoughtProcess?: string | undefined;
   confidence: number;
   domain: string;
   quickActions?: {
     label: string;
     actionType: "send_message" | "open_url" | "scroll_section" | "download_resume" | "copy_email";
-    payload?: string;
-  }[];
+    payload?: string | undefined;
+  }[] | undefined;
 }
 
 interface ConversationContext {
@@ -302,8 +302,23 @@ export class SeniorAIInferenceEngine {
     }
 
     // -------------------------------------------------------------
-    // 13. SPECIFIC PROJECTS: WRIPER AI, VIDSNAP AI, VIMABAZZAR
+    // 13. SPECIFIC PROJECTS: PRISM, WRIPER AI, VIDSNAP AI, VIMABAZZAR
     // -------------------------------------------------------------
+    if (has("prism", "sih", "sih-26", "smart india hackathon", "infrastructure", "mospi")) {
+      const prism = projects.find((p) => p.slug === "prism-ai")!;
+      return {
+        domain: "Project Deep-Dive: PRISM (SIH 2026)",
+        confidence: 0.99,
+        thoughtProcess:
+          "Reasoning Engine: [Intent: PRISM Architecture & SIH 2026] → Dual XGBoost delay/cost prediction, TreeSHAP factor attribution, 100% inland Leaflet GIS, ephemeral MoSPI PDF extraction.",
+        text: `⚡ **PRISM — Predictive Infrastructure & Risk Monitoring (SIH 2026):**\n\n• **Overview**: ${prism.shortDescription}\n• **Tech Stack**: ${prism.technologies.join(", ")}\n• **Key Architecture**:\n  - Dual XGBoost 2.0 regression & classification models predicting schedule slips (months) and cost overruns (₹ Cr).\n  - TreeSHAP factor attribution vectors providing transparent, explainable feature weights for every capital asset.\n  - High-precision Leaflet & MapLibre GIS engine with 100% boundary containment across 1,981 projects totaling ₹42.78+ Lakh Crore.\n  - Autonomous ephemeral parser ingesting 160+ page MoSPI Flash Reports in volatile RAM in <40 seconds.\n• **GitHub Repository**: [github.com/vedant1506/SIH-26](${prism.githubUrl})`,
+        quickActions: [
+          { label: "🚀 View All Projects", actionType: "scroll_section", payload: "projects" },
+          { label: "📂 View Source Code", actionType: "open_url", payload: prism.githubUrl ?? "https://github.com/vedant1506/SIH-26" },
+        ],
+      };
+    }
+
     if (has("wriper", "wriper ai")) {
       const wriper = projects.find((p) => p.slug === "wriper-ai")!;
       return {
@@ -313,7 +328,7 @@ export class SeniorAIInferenceEngine {
           "Reasoning Engine: [Intent: Wriper AI Architectural Breakdown] → U2Net neural matting, Canvas 2D API down-sampling, optimistic preview rendering, React 19/TypeScript architecture.",
         text: `✨ **Wriper AI — High-Performance Background Remover:**\n\n• **Overview**: ${wriper.shortDescription}\n• **Tech Stack**: ${wriper.technologies.join(", ")}\n• **Key Architecture**:\n  - U2Net Neural Matting model running on client/cloud edge for sub-second foreground segmentation.\n  - Optimistic HTML5 Canvas pipeline with client-side down-sampling to handle high-resolution image uploads.\n  - Lossless alpha channel thresholding producing clean, transparent PNG outputs.\n• **Live Application**: [wriper.vercel.app](${wriper.liveUrl})\n• **GitHub Repository**: [github.com/SHAHADPATHAN/wriper-ai-background-remover](${wriper.githubUrl})`,
         quickActions: [
-          { label: "🌐 Open Wriper AI Live", actionType: "open_url", payload: wriper.liveUrl },
+          { label: "🌐 Open Wriper AI Live", actionType: "open_url", payload: wriper.liveUrl ?? "https://wriper.vercel.app" },
           { label: "🚀 View All Projects", actionType: "scroll_section", payload: "projects" },
         ],
       };
@@ -328,7 +343,7 @@ export class SeniorAIInferenceEngine {
           "Reasoning Engine: [Intent: VidSnap AI Deep-Dive] → OpenCV frame extraction, color histogram delta thresholding, FastAPI async streaming, Render deployment.",
         text: `🎥 **VidSnap AI — Automated Video Intelligence Tool:**\n\n• **Overview**: ${vidsnap.shortDescription}\n• **Tech Stack**: ${vidsnap.technologies.join(", ")}\n• **Key Architecture**:\n  - Automated keyframe extraction based on OpenCV frame differencing and color histogram deltas.\n  - Chunked video stream decoding preventing high memory utilization on large MP4/WebM files.\n  - High-throughput asynchronous FastAPI backend deployed on Render.\n• **Live Application**: [vidsnapai.vercel.app](${vidsnap.liveUrl})\n• **GitHub Repository**: [github.com/SHAHADPATHAN/VidsnapAi](${vidsnap.githubUrl})`,
         quickActions: [
-          { label: "🌐 Open VidSnap AI Live", actionType: "open_url", payload: vidsnap.liveUrl },
+          { label: "🌐 Open VidSnap AI Live", actionType: "open_url", payload: vidsnap.liveUrl ?? "https://vidsnapai-k36i.onrender.com" },
           { label: "🚀 View All Projects", actionType: "scroll_section", payload: "projects" },
         ],
       };
@@ -343,7 +358,7 @@ export class SeniorAIInferenceEngine {
           "Reasoning Engine: [Intent: VimaBazzar Insurance Platform] → Responsive UI, dynamic policy filtering, sub-second Vercel edge deployment.",
         text: `🛡️ **VimaBazzar — Insurance Discovery & Comparison Platform:**\n\n• **Overview**: ${vima.shortDescription}\n• **Tech Stack**: ${vima.technologies.join(", ")}\n• **Key Architecture**:\n  - Ultra-responsive, mobile-first interface optimized for insurance policy discovery and consumer quote comparison.\n  - Real-time client-side calculation models for insurance estimates.\n• **Live Application**: [vimabazzar.com](${vima.liveUrl})`,
         quickActions: [
-          { label: "🌐 Open VimaBazzar Live", actionType: "open_url", payload: vima.liveUrl },
+          { label: "🌐 Open VimaBazzar Live", actionType: "open_url", payload: vima.liveUrl ?? "https://vimabazzar.vercel.app/" },
         ],
       };
     }
@@ -353,8 +368,8 @@ export class SeniorAIInferenceEngine {
         domain: "Shahad's Featured Projects Suite",
         confidence: 0.99,
         thoughtProcess:
-          "Reasoning Engine: [Intent: Portfolio Projects Suite] → Compiling 6 major engineering projects across AI, Full-Stack, Data Science, and Systems.",
-        text: `🚀 **Shahad Pathan's Key Production Projects:**\n\n1. **Wriper AI** ([wriper.vercel.app](https://wriper.vercel.app))\n   • AI-powered image background removal and subject isolation using neural matting and HTML5 Canvas.\n\n2. **VidSnap AI** ([vidsnapai.vercel.app](https://vidsnapai.vercel.app))\n   • Automated video intelligence, keyframe extraction, and scene transition detection built with Python, OpenCV, and FastAPI.\n\n3. **VimaBazzar** ([vimabazzar.com](https://vimabazzar.com))\n   • Modern insurance comparison portal and financial advisory platform.\n\n4. **Practical Data Science Suite** ([github.com/SHAHADPATHAN/PDS-PRACTICAL](https://github.com/SHAHADPATHAN/PDS-PRACTICAL))\n   • Modular Python data science and machine learning pipelines.\n\n5. **Environment Variable Security Toolkit**\n   • Defensive security audit tool for detecting leaked credentials and environment variables in full-stack repositories.\n\n6. **Developer Portfolio Website**\n   • Ultra-fast web platform engineered with **TanStack Start, React 19, TypeScript, and Tailwind CSS v4**.`,
+          "Reasoning Engine: [Intent: Portfolio Projects Suite] → Compiling key engineering projects across AI, Full-Stack, Data Science, and Systems.",
+        text: `🚀 **Shahad Pathan's Key Production Projects:**\n\n1. **PRISM — Predictive Infrastructure & Risk Monitoring** ([github.com/vedant1506/SIH-26](https://github.com/vedant1506/SIH-26))\n   • National infrastructure AI platform with Dual XGBoost, TreeSHAP explainability, and Leaflet GIS for MoSPI (Smart India Hackathon 2026).\n\n2. **Wriper AI** ([wriper.vercel.app](https://wriper.vercel.app))\n   • AI-powered image background removal and subject isolation using neural matting and HTML5 Canvas.\n\n3. **VidSnap AI** ([vidsnapai.vercel.app](https://vidsnapai.vercel.app))\n   • Automated video intelligence, keyframe extraction, and scene transition detection built with Python, OpenCV, and FastAPI.\n\n4. **VimaBazzar** ([vimabazzar.com](https://vimabazzar.com))\n   • Modern insurance comparison portal and financial advisory platform.\n\n5. **Practical Data Science Suite** ([github.com/SHAHADPATHAN/PDS-PRACTICAL](https://github.com/SHAHADPATHAN/PDS-PRACTICAL))\n   • Modular Python data science and machine learning pipelines.\n\n6. **Environment Variable Security Toolkit**\n   • Defensive security audit tool for detecting leaked credentials and environment variables in full-stack repositories.\n\n7. **Developer Portfolio Website**\n   • Ultra-fast web platform engineered with **TanStack Start, React 19, TypeScript, and Tailwind CSS v4**.`,
         quickActions: [
           { label: "🚀 Scroll to Projects Section", actionType: "scroll_section", payload: "projects" },
           { label: "⚡ View Technical Skills", actionType: "scroll_section", payload: "skills" },
