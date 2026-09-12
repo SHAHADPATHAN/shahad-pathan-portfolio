@@ -140,15 +140,23 @@ export function ProjectCard({
       {/* Body Content — Uniform Height Flex Container */}
       <div className="flex flex-1 flex-col justify-between p-6">
         <div>
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-2">
             <span className="font-mono text-xs font-semibold text-primary-bright uppercase tracking-wider">
               {project.category}
             </span>
-            {project.featured ? (
-              <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 font-mono text-[10px] tracking-wider uppercase text-primary-bright font-medium">
-                Featured
-              </span>
-            ) : null}
+            <div className="flex items-center gap-1.5 flex-wrap justify-end">
+              {project.status ? (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[9px] sm:text-[10px] tracking-wider uppercase text-emerald-400 font-medium">
+                  <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  {project.status}
+                </span>
+              ) : null}
+              {project.featured ? (
+                <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 font-mono text-[10px] tracking-wider uppercase text-primary-bright font-medium">
+                  Featured
+                </span>
+              ) : null}
+            </div>
           </div>
 
           <h3

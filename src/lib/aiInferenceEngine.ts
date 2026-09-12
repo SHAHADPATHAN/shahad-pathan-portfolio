@@ -302,8 +302,23 @@ export class SeniorAIInferenceEngine {
     }
 
     // -------------------------------------------------------------
-    // 13. SPECIFIC PROJECTS: PRISM, WRIPER AI, VIDSNAP AI, VIMABAZZAR
+    // 13. SPECIFIC PROJECTS: AEGISAI, PRISM, WRIPER AI, VIDSNAP AI, VIMABAZZAR
     // -------------------------------------------------------------
+    if (has("aegis", "aegisai", "vapt", "appsec", "penetration testing", "security platform", "bola", "idor", "sast", "dast")) {
+      const aegis = projects.find((p) => p.slug === "aegis-ai")!;
+      return {
+        domain: "Project Deep-Dive: AegisAI (Active Project)",
+        confidence: 0.99,
+        thoughtProcess:
+          "Reasoning Engine: [Intent: AegisAI Multi-Agent VAPT Architecture] → LangGraph multi-agent pipeline (Recon → Reason → Verify), QLoRA 4-bit fine-tuned 7B/8B code models, Playwright DAST, tree-sitter AST SAST, automated PR patch generation.",
+        text: `🛡️ **AegisAI — Autonomous Multi-Agent VAPT Platform (Currently Working):**\n\n• **Overview**: ${aegis.shortDescription}\n• **Status**: ⚡ **Currently In Active Development** (GTU-GSET Semester 5 Capstone with Dr. Deepak Upadhyay)\n• **Team**: Vedant Chauhan, Shahad Pathan, Divy\n• **Tech Stack**: ${aegis.technologies.join(", ")}\n• **Key Architecture**:\n  - **Autonomous Multi-Agent Pipeline**: LangGraph orchestrating Reconnaissance, Vulnerability Reasoning, and Exploit Verification.\n  - **Hybrid SAST + DAST Correlation**: Ingests both GitHub code and live URLs to map runtime exploits directly to source code line numbers.\n  - **Fine-Tuned SLM**: Fine-tuned Qwen2.5-Coder / Llama-3 (via 4-bit QLoRA & Unsloth) specifically to catch business logic flaws & BOLA/IDOR.\n  - **Automated Fixes**: Generates merge-ready GitHub pull request code patches.\n• **GitHub Repository**: [github.com/vedant1506/AegisAi](${aegis.githubUrl})`,
+        quickActions: [
+          { label: "🚀 View All Projects", actionType: "scroll_section", payload: "projects" },
+          { label: "📂 View Source Code", actionType: "open_url", payload: aegis.githubUrl ?? "https://github.com/vedant1506/AegisAi" },
+        ],
+      };
+    }
+
     if (has("prism", "sih", "sih-26", "smart india hackathon", "infrastructure", "mospi")) {
       const prism = projects.find((p) => p.slug === "prism-ai")!;
       return {
@@ -369,7 +384,7 @@ export class SeniorAIInferenceEngine {
         confidence: 0.99,
         thoughtProcess:
           "Reasoning Engine: [Intent: Portfolio Projects Suite] → Compiling key engineering projects across AI, Full-Stack, Data Science, and Systems.",
-        text: `🚀 **Shahad Pathan's Key Production Projects:**\n\n1. **PRISM — Predictive Infrastructure & Risk Monitoring** ([github.com/vedant1506/SIH-26](https://github.com/vedant1506/SIH-26))\n   • National infrastructure AI platform with Dual XGBoost, TreeSHAP explainability, and Leaflet GIS for MoSPI (Smart India Hackathon 2026).\n\n2. **Wriper AI** ([wriper.vercel.app](https://wriper.vercel.app))\n   • AI-powered image background removal and subject isolation using neural matting and HTML5 Canvas.\n\n3. **VidSnap AI** ([vidsnapai.vercel.app](https://vidsnapai.vercel.app))\n   • Automated video intelligence, keyframe extraction, and scene transition detection built with Python, OpenCV, and FastAPI.\n\n4. **VimaBazzar** ([vimabazzar.com](https://vimabazzar.com))\n   • Modern insurance comparison portal and financial advisory platform.\n\n5. **Practical Data Science Suite** ([github.com/SHAHADPATHAN/PDS-PRACTICAL](https://github.com/SHAHADPATHAN/PDS-PRACTICAL))\n   • Modular Python data science and machine learning pipelines.\n\n6. **Environment Variable Security Toolkit**\n   • Defensive security audit tool for detecting leaked credentials and environment variables in full-stack repositories.\n\n7. **Developer Portfolio Website**\n   • Ultra-fast web platform engineered with **TanStack Start, React 19, TypeScript, and Tailwind CSS v4**.`,
+        text: `🚀 **Shahad Pathan's Key Production Projects:**\n\n1. **AegisAI — Autonomous Multi-Agent VAPT Platform** (⚡ *Currently Working* - [github.com/vedant1506/AegisAi](https://github.com/vedant1506/AegisAi))\n   • Autonomous application security platform bridging SAST & DAST with LangGraph multi-agent exploit reasoning and automated PR code patches.\n\n2. **PRISM — Predictive Infrastructure & Risk Monitoring** ([github.com/vedant1506/SIH-26](https://github.com/vedant1506/SIH-26))\n   • National infrastructure AI platform with Dual XGBoost, TreeSHAP explainability, and Leaflet GIS for MoSPI (Smart India Hackathon 2026).\n\n3. **Wriper AI** ([wriper.vercel.app](https://wriper.vercel.app))\n   • AI-powered image background removal and subject isolation using neural matting and HTML5 Canvas.\n\n4. **VidSnap AI** ([vidsnapai.vercel.app](https://vidsnapai.vercel.app))\n   • Automated video intelligence, keyframe extraction, and scene transition detection built with Python, OpenCV, and FastAPI.\n\n5. **VimaBazzar** ([vimabazzar.com](https://vimabazzar.com))\n   • Modern insurance comparison portal and financial advisory platform.\n\n6. **Practical Data Science Suite** ([github.com/SHAHADPATHAN/PDS-PRACTICAL](https://github.com/SHAHADPATHAN/PDS-PRACTICAL))\n   • Modular Python data science and machine learning pipelines.\n\n7. **Environment Variable Security Toolkit**\n   • Defensive security audit tool for detecting leaked credentials and environment variables in full-stack repositories.\n\n8. **Developer Portfolio Website**\n   • Ultra-fast web platform engineered with **TanStack Start, React 19, TypeScript, and Tailwind CSS v4**.`,
         quickActions: [
           { label: "🚀 Scroll to Projects Section", actionType: "scroll_section", payload: "projects" },
           { label: "⚡ View Technical Skills", actionType: "scroll_section", payload: "skills" },

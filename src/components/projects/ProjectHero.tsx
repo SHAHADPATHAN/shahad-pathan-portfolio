@@ -60,6 +60,12 @@ export function ProjectHero({ project }: { project: Project }) {
           <ScrollReveal>
             <div className="flex flex-wrap items-center gap-3">
               <span className="eyebrow">{project.category}</span>
+              {project.status ? (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 font-mono text-xs tracking-wider uppercase text-emerald-400 font-medium">
+                  <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  {project.status}
+                </span>
+              ) : null}
               {project.featured ? (
                 <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 font-mono text-[0.625rem] tracking-[0.14em] uppercase text-primary-bright">
                   Featured Project

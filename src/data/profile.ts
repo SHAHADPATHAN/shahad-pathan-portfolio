@@ -39,5 +39,5 @@ export const credibilityMetrics: CredibilityMetric[] = [
   { label: "Public Repositories", value: "10+", hint: "10+ Repositories" },
   { label: "Core Focus", value: "AI & Data", hint: "AI / Data Science" },
   { label: "Engineering Major", value: "GTU '28", hint: "Computer Engineering (2024–2028)" },
-  { label: "Active Builds", value: "Live", hint: "Wriper & Vidsnap AI" },
+  { label: "Active Builds", value: "Active", hint: "AegisAI & PRISM" },
 ];

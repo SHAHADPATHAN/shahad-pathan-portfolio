@@ -39,7 +39,11 @@ export const currentFocus: FocusGroup[] = [
     id: "building",
     title: "Currently building",
     description: "Production-ready software and intelligence tools.",
-    items: ["AI-powered computer vision tools", "Full-stack React & TypeScript apps", "RESTful APIs with Python & FastAPI"],
+    items: [
+      "AegisAI — Autonomous Multi-Agent VAPT Security Platform",
+      "PRISM — Predictive Infrastructure Risk & Early Warning Intelligence",
+      "Full-stack React 19, TypeScript & FastAPI AI systems",
+    ],
   },
   {
     id: "exploring",

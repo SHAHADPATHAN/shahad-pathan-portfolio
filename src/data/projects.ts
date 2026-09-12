@@ -50,6 +50,7 @@ export type Project = {
   githubUrl?: string;
   liveUrl?: string;
   featured?: boolean;
+  status?: string;
   problem?: string;
   solution?: string;
   features?: string[];
@@ -61,6 +62,115 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  {
+    id: "aegis-ai",
+    slug: "aegis-ai",
+    title: "AegisAI — Autonomous Multi-Agent VAPT Platform",
+    shortDescription:
+      "Autonomous multi-agent application security framework bridging static code analysis (SAST) and dynamic testing (DAST) with fine-tuned LLM exploit reasoning and automated PR patches.",
+    description:
+      "AegisAI is an autonomous, AI-driven Vulnerability Assessment and Penetration Testing (VAPT) platform co-created by Shahad Pathan, Vedant Chauhan, and Divy under the faculty guidance of Dr. Deepak Upadhyay at GTU-GSET. It bridges static code analysis (SAST) and dynamic testing (DAST) by orchestrating an autonomous multi-agent LangGraph pipeline (Reconnaissance → Reasoning → Verification). A locally fine-tuned 7B/8B code model identifies complex business logic flaws like BOLA/IDOR, verifies exploits with automated Playwright crawlers, and generates merge-ready GitHub pull request patches.",
+    category: "AI",
+    technologies: [
+      "Python",
+      "FastAPI",
+      "LangGraph",
+      "Next.js 15",
+      "React",
+      "Playwright",
+      "Tree-Sitter",
+      "QLoRA",
+      "Docker",
+      "Tailwind CSS",
+    ],
+    image: "/projects/aegis-ai.png",
+    imageAlt: "AegisAI autonomous multi-agent application security dashboard and code diff viewer",
+    gallery: [
+      {
+        src: "/projects/aegis-ai.png",
+        alt: "AegisAI VAPT Dashboard with multi-agent pipeline status and code diff patch viewer",
+        caption: "AegisAI VAPT Dashboard: Autonomous multi-agent pipeline (Recon, Reason, Verify) with automated PR patch generation.",
+      },
+    ],
+    featured: true,
+    status: "Currently Working",
+    githubUrl: "https://github.com/vedant1506/AegisAi",
+    problem:
+      "Modern web application security is broken into two inefficient silos: Static Analysis (SAST) inspects source code but generates excessive false alarms without runtime reachability verification, while Dynamic Testing (DAST) attacks running servers but is blind to source code and cannot write code patches. Crucially, both traditional approaches miss complex multi-step authorization flaws like BOLA/IDOR (OWASP API Top 10 #1).",
+    solution:
+      "Engineered an autonomous hybrid VAPT platform that ingests both a GitHub repository and a live target URL. An autonomous Playwright crawler maps routes and state transitions, an AST tree-sitter engine extracts endpoint schemas, and a fine-tuned 7B/8B code model reasons across multi-user sessions to actively verify exploit payloads and generate merge-ready code remediation patches.",
+    features: [
+      "Autonomous Multi-Agent Orchestration: LangGraph state graph executing sequential and cyclic Reconnaissance → Reasoning → Verification agents.",
+      "Fine-Tuned Exploit Reasoning: Fine-tuned Qwen2.5-Coder / Llama-3 code models using QLoRA (4-bit quantization via Unsloth) specifically on BOLA/IDOR and business logic flaw datasets.",
+      "Hybrid SAST + DAST Correlation: Ingests GitHub source code and live target URL concurrently to map runtime exploits directly back to exact repository file paths and line numbers.",
+      "Active Proof-of-Concept Verification: Dual-user session replay via Playwright and asynchronous HTTPX eliminates false positives before alerting developers.",
+      "Automated Code Patch PRs: Automatically writes remediated code diffs and synthesizes merge-ready GitHub pull requests to fix verified vulnerabilities.",
+      "Interactive Security Command Center: Next.js 15 dashboard featuring real-time scan progress, side-by-side Monaco code diffs, and OWASP API Top 10 telemetry.",
+    ],
+    architecture: {
+      summary:
+        "Decoupled multi-service architecture coordinating a Next.js 15 frontend, FastAPI backend gateway with Redis queues, LangGraph multi-agent AI engine with fine-tuned local SLMs, and a Playwright headless dynamic crawler.",
+      nodes: [
+        {
+          layer: "frontend",
+          title: "VAPT Presentation Tier",
+          technologies: ["Next.js 15", "React 19", "TypeScript", "Tailwind CSS", "Monaco Editor / Diff"],
+          description: "Interactive scan visualizer, code diff patch viewer, and real-time vulnerability telemetry.",
+        },
+        {
+          layer: "api",
+          title: "FastAPI Backend Gateway",
+          technologies: ["FastAPI", "Async HTTPX", "Redis Task Queue", "WebSockets / SSE"],
+          description: "Scan job orchestration, event streaming, and asynchronous crawler task management.",
+        },
+        {
+          layer: "ai-model",
+          title: "LangGraph Multi-Agent Engine",
+          technologies: ["LangGraph", "Qwen2.5-Coder-7B", "Llama-3.1-8B", "QLoRA / Unsloth", "Ollama"],
+          description: "Reconnaissance, vulnerability reasoning, and multi-user authorization exploit verification.",
+        },
+        {
+          layer: "backend",
+          title: "AST Parser & Patch Synthesizer",
+          technologies: ["Python tree-sitter", "Git API", "Pydantic v2"],
+          description: "Source code AST route extraction, file line-number mapping, and Git diff generation.",
+        },
+        {
+          layer: "external",
+          title: "Dynamic DAST & Target Sandboxes",
+          technologies: ["Microsoft Playwright", "Token Manager", "OWASP Juice Shop Sandbox", "Docker"],
+          description: "Headless browser crawling, stateful session exploration, and isolated payload execution.",
+        },
+      ],
+    },
+    challenges: [
+      {
+        challenge: "Accurately identifying Broken Object Level Authorization (BOLA) without executing catastrophic data destruction on live systems.",
+        solution: "Engineered multi-user credential token isolation in the Playwright crawler to test cross-tenant object access strictly on sandbox staging entities.",
+      },
+      {
+        challenge: "Connecting black-box HTTP request/response payloads from dynamic crawling back to static repository source code.",
+        solution: "Built an AST endpoint signature extractor using tree-sitter that parses route decorators and maps incoming URI paths directly to handler function AST nodes.",
+      },
+      {
+        challenge: "Running multi-agent LLM reasoning with low latency and high code precision without reliance on expensive cloud APIs.",
+        solution: "Fine-tuned open-weights 7B/8B code models with 4-bit QLoRA using Unsloth, running local high-throughput inference via Ollama and vLLM.",
+      },
+    ],
+    results: [
+      "Academic Capstone Project at Gujarat Technological University (GTU-GSET, Sem 5) under faculty guidance of Dr. Deepak Upadhyay.",
+      "Co-created by Shahad Pathan, Vedant Chauhan, and Divy.",
+      "Currently in active development with continuous end-to-end multi-agent module testing across OWASP Juice Shop benchmarks.",
+    ],
+    lessonsLearned: [
+      "Combining static code analysis with dynamic runtime verification virtually eliminates the false positive fatigue that plagues traditional AppSec tools.",
+      "Small, fine-tuned domain-specific language models (7B/8B) outperform large generalized frontier models on specialized code vulnerability patch synthesis.",
+    ],
+    futureImprovements: [
+      "Automated CI/CD GitHub Action integration to run autonomous VAPT scans on every pull request.",
+      "Autonomous privilege escalation graph exploration across complex role-based microservice architectures.",
+    ],
+  },
   {
     id: "prism-ai",
     slug: "prism-ai",
