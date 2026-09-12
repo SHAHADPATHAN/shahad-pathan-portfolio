@@ -9,6 +9,7 @@ import { Skills } from "@/components/sections/Skills";
 import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
 import { Awards } from "@/components/sections/Awards";
 import { Experience } from "@/components/sections/Experience";
+import { Education } from "@/components/sections/Education";
 import { Contact } from "@/components/sections/Contact";
 import { ResumeSection } from "@/components/sections/ResumeSection";
 import { profile } from "@/data/profile";
@@ -79,8 +80,11 @@ function Home() {
         {/* Real Featured Projects with Uniform Card Sizing */}
         <FeaturedProjects />
 
-        {/* Experience & Education (GTU '28) Horizontal Carousel */}
+        {/* Professional Experience */}
         <Experience />
+
+        {/* Education & Academics (GTU Class of 2028) */}
+        <Education />
 
         {/* Awards & Certifications with Verification */}
         <Awards />

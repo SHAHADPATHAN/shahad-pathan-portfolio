@@ -274,7 +274,7 @@ export class SeniorAIInferenceEngine {
           "Reasoning Engine: [Intent: Academic Foundation] → Retrieving GTU B.E. Computer Engineering (2024-2028) curriculum, specialized AI/Data tracks, and Secondary education specs.",
         text: `🎓 **Shahad Pathan's Academic Background:**\n\n1. **${gtu.role}**\n   • **Institution**: ${gtu.organization}\n   • **Timeline**: ${gtu.period}\n   • **Location**: ${gtu.location}\n   • **Academic Focus**: ${gtu.description}\n   • **Core Subjects**: Data Structures & Algorithms, Object-Oriented Programming (C++/Java), Artificial Intelligence, Machine Learning, Database Management Systems (DBMS), Linux Kernel & Operating Systems.\n\n2. **${school.role}**\n   • **Institution**: ${school.organization}\n   • **Timeline**: ${school.period}\n   • **Location**: ${school.location}\n   • **Focus**: Rigorous foundation in Higher Secondary Science, Advanced Mathematics, and Computer Science.`,
         quickActions: [
-          { label: "💼 View Experience & Education", actionType: "scroll_section", payload: "experience" },
+          { label: "🎓 View Education Section", actionType: "scroll_section", payload: "education" },
           { label: "🏆 View Certifications", actionType: "scroll_section", payload: "awards" },
           { label: "📄 Download Resume", actionType: "download_resume" },
         ],
