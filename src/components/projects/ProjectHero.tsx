@@ -83,6 +83,22 @@ export function ProjectHero({ project }: { project: Project }) {
                 : project.shortDescription}
             </p>
 
+            {project.status ? (
+              <div className="mt-5 flex items-start gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-xs sm:text-sm text-foreground/90 backdrop-blur-sm">
+                <div className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-emerald-500/40 bg-emerald-500/20 text-emerald-400 mt-0.5">
+                  <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+                </div>
+                <div>
+                  <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-emerald-400">
+                    Project Status: {project.status}
+                  </p>
+                  <p className="mt-0.5 leading-relaxed text-muted-foreground text-xs sm:text-[13px]">
+                    This system is currently undergoing active engineering and research. Core multi-agent reasoning, AST route extractors, and dynamic crawler modules are being developed and tested against benchmark environments.
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
             {/* Technology tags */}
             <div className="mt-6">
               <p className="mb-2.5 font-mono text-[11px] tracking-[0.18em] uppercase text-muted-foreground">

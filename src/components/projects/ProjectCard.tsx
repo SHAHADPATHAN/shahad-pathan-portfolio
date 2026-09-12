@@ -38,14 +38,23 @@ function ProjectImage({ project }: { project: Project }) {
     );
   }
 
-  // If no image & no live website, render clean code header
+  // If no image & no live website, render clean code / active R&D header
   return (
     <div className="flex items-center justify-between border-b border-border bg-surface-2/60 px-6 py-4">
       <div className="flex items-center gap-2 text-muted-foreground">
         <Terminal className="size-4 text-primary" aria-hidden="true" />
-        <span className="font-mono text-xs text-foreground/80 font-medium">Source Repository</span>
+        <span className="font-mono text-xs text-foreground/80 font-medium">
+          {project.status ? "Active Development" : "Source Repository"}
+        </span>
       </div>
-      <Code2 className="size-4 text-muted-foreground" aria-hidden="true" />
+      {project.status ? (
+        <span className="inline-flex items-center gap-1.5 font-mono text-[10px] text-emerald-400">
+          <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          Work In Progress
+        </span>
+      ) : (
+        <Code2 className="size-4 text-muted-foreground" aria-hidden="true" />
+      )}
     </div>
   );
 }

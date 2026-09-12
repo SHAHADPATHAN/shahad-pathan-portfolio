@@ -67,9 +67,9 @@ export const projects: Project[] = [
     slug: "aegis-ai",
     title: "AegisAI — Autonomous Multi-Agent VAPT Platform",
     shortDescription:
-      "Autonomous multi-agent application security framework bridging static code analysis (SAST) and dynamic testing (DAST) with fine-tuned LLM exploit reasoning and automated PR patches.",
+      "Autonomous multi-agent application security framework bridging static code analysis (SAST) and dynamic testing (DAST) with fine-tuned LLM exploit reasoning. [Currently Under Active Development — GTU-GSET Capstone R&D]",
     description:
-      "AegisAI is an autonomous, AI-driven Vulnerability Assessment and Penetration Testing (VAPT) platform co-created by Shahad Pathan, Vedant Chauhan, and Divy under the faculty guidance of Dr. Deepak Upadhyay at GTU-GSET. It bridges static code analysis (SAST) and dynamic testing (DAST) by orchestrating an autonomous multi-agent LangGraph pipeline (Reconnaissance → Reasoning → Verification). A locally fine-tuned 7B/8B code model identifies complex business logic flaws like BOLA/IDOR, verifies exploits with automated Playwright crawlers, and generates merge-ready GitHub pull request patches.",
+      "AegisAI is an ongoing engineering and research initiative currently under active development by Shahad Pathan, Vedant Chauhan, and Divy at GTU-GSET under the faculty guidance of Dr. Deepak Upadhyay. The platform bridges static code analysis (SAST) and dynamic runtime testing (DAST) by orchestrating an autonomous multi-agent LangGraph pipeline (Reconnaissance → Reasoning → Verification). A locally fine-tuned 7B/8B code model identifies complex business logic flaws like BOLA/IDOR, verifies exploits with automated Playwright crawlers, and generates merge-ready GitHub pull request patches.",
     category: "AI",
     technologies: [
       "Python",
@@ -83,17 +83,9 @@ export const projects: Project[] = [
       "Docker",
       "Tailwind CSS",
     ],
-    image: "/projects/aegis-ai.png",
-    imageAlt: "AegisAI autonomous multi-agent application security dashboard and code diff viewer",
-    gallery: [
-      {
-        src: "/projects/aegis-ai.png",
-        alt: "AegisAI VAPT Dashboard with multi-agent pipeline status and code diff patch viewer",
-        caption: "AegisAI VAPT Dashboard: Autonomous multi-agent pipeline (Recon, Reason, Verify) with automated PR patch generation.",
-      },
-    ],
+    // Work in active development — visual assets and live deployments will arrive upon initial stable release
     featured: true,
-    status: "Currently Working",
+    status: "Under Active Development",
     githubUrl: "https://github.com/vedant1506/AegisAi",
     problem:
       "Modern web application security is broken into two inefficient silos: Static Analysis (SAST) inspects source code but generates excessive false alarms without runtime reachability verification, while Dynamic Testing (DAST) attacks running servers but is blind to source code and cannot write code patches. Crucially, both traditional approaches miss complex multi-step authorization flaws like BOLA/IDOR (OWASP API Top 10 #1).",
@@ -158,9 +150,9 @@ export const projects: Project[] = [
       },
     ],
     results: [
-      "Academic Capstone Project at Gujarat Technological University (GTU-GSET, Sem 5) under faculty guidance of Dr. Deepak Upadhyay.",
-      "Co-created by Shahad Pathan, Vedant Chauhan, and Divy.",
-      "Currently in active development with continuous end-to-end multi-agent module testing across OWASP Juice Shop benchmarks.",
+      "Academic Capstone Project at Gujarat Technological University (GTU-GSET, Sem 5) under the faculty guidance of Dr. Deepak Upadhyay.",
+      "Collaborative Engineering Initiative: Co-created and actively developed by Shahad Pathan, Vedant Chauhan, and Divy.",
+      "Project Status: Active Work In Progress — Core reconnaissance crawlers and tree-sitter AST parsers are currently being benchmarked against OWASP testbeds, with continuous agentic reasoning iterations in development.",
     ],
     lessonsLearned: [
       "Combining static code analysis with dynamic runtime verification virtually eliminates the false positive fatigue that plagues traditional AppSec tools.",
