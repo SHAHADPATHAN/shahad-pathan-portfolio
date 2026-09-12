@@ -4,7 +4,6 @@ import {
   X,
   Send,
   Sparkles,
-  User,
   Trash2,
   ArrowUpRight,
   Lightbulb,
@@ -14,8 +13,6 @@ import {
   ChevronUp,
   Volume2,
   VolumeX,
-  Download,
-  Mail,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { profile } from "@/data/profile";
@@ -33,46 +30,13 @@ interface ChatMessage {
   quickActions?: AIInferenceResult["quickActions"] | undefined;
 }
 
-export type ModelFilterMode = "all" | "gemini" | "llama" | "qwen" | "chatgpt";
-
-const MODEL_PROMPT_SUGGESTIONS: Record<ModelFilterMode, string[]> = {
-  all: [
-    "Who is Shahad Pathan?",
-    "Compare Gemini vs Llama vs Qwen vs ChatGPT",
-    "Explain Shahad's AI projects (Wriper & VidSnap)",
-    "Tell me about his internships & certifications",
-    "How does RAG and Vector Embeddings work?",
-    "How can I contact or hire Shahad?",
-  ],
-  gemini: [
-    "Tell me about Google Gemini 2.0 Flash & Pro",
-    "How does Gemini's 2-Million token context work?",
-    "Explain DeepMind Antigravity AI agent architecture",
-    "What is Gemma 2 open weights model?",
-    "Show Python code for Gemini 2.0 with search tools",
-  ],
-  llama: [
-    "What are the capabilities of Meta LLaMA 3.3 70B?",
-    "How do you fine-tune Llama with LoRA & QLoRA?",
-    "Explain Llama 3.2 Vision and on-device models",
-    "How do you self-host Llama with vLLM & Ollama?",
-    "What is Grouped Query Attention (GQA) & RoPE?",
-  ],
-  qwen: [
-    "What makes Alibaba Qwen 2.5-Coder 32B so powerful?",
-    "How does QwQ-32B reasoning & thinking tokens work?",
-    "Explain Qwen 2.5-VL Vision-Language architecture",
-    "Show Python vLLM serving code for Qwen 2.5",
-    "How does Qwen compare to Claude and GPT-4o?",
-  ],
-  chatgpt: [
-    "How do OpenAI o1 & o3 reasoning models work?",
-    "Compare GPT-4o vs GPT-4o-mini",
-    "How to use Structured JSON Outputs with OpenAI?",
-    "Explain OpenAI Realtime Audio & Voice WebSocket API",
-    "Show Python code for OpenAI function calling",
-  ],
-};
+const SUGGESTED_PROMPTS = [
+  "What are Shahad's top AI projects?",
+  "Tell me about AegisAI and PRISM",
+  "What is his B.E. degree at GTU?",
+  "What are his verified certifications?",
+  "How can I contact or hire Shahad?",
+];
 
 function CodeBlock({ code, language }: { code: string; language: string }) {
   const [copied, setCopied] = useState(false);
@@ -207,7 +171,6 @@ export function PortfolioChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [activeModelMode, setActiveModelMode] = useState<ModelFilterMode>("all");
   const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null);
   const [expandedThoughtId, setExpandedThoughtId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -218,34 +181,34 @@ export function PortfolioChatbot() {
     {
       id: "welcome-1",
       sender: "bot",
-      text: `👋 Hi! I'm **Shahad AI** — an advanced intelligent pair assistant fine-tuned on **Shahad Pathan's engineering portfolio** and frontier cloud AI architectures: **Google Gemini**, **Meta LLaMA**, **Alibaba Qwen**, and **OpenAI ChatGPT**!\n\nUse the model focus selector above to explore specific architectures, or ask me anything!`,
-      thoughtProcess: "Initialized Sr. AI Engineer multi-agent inference engine with Gemini, LLaMA, Qwen, and ChatGPT cloud datasets.",
+      text: `👋 Hi! I'm **Shahad AI** — personal AI assistant for **Shahad Pathan**.\n\nI can answer any questions about Shahad's **engineering projects** (AegisAI, PRISM, Wriper, VidSnap), **technical skills**, **B.E. Computer Engineering degree at GTU (Class of 2028)**, **verified certifications & hackathons**, **internship experience**, or **how to contact and hire him**.\n\nWhat would you like to know?`,
+      thoughtProcess: "Initialized portfolio intelligence engine grounded in Shahad Pathan's verified project, internship, and credential data.",
       timestamp: "Just now",
       quickActions: [
         {
-          label: "✨ Google Gemini 2.0",
+          label: "🚀 Featured AI Projects",
           actionType: "send_message",
-          payload: "Tell me about Google Gemini 2.0 and DeepMind AI",
+          payload: "What are Shahad's top projects?",
         },
         {
-          label: "🦙 Meta LLaMA 3.3",
+          label: "💼 Work Experience",
           actionType: "send_message",
-          payload: "What are the capabilities of Meta LLaMA 3.3?",
+          payload: "Tell me about his internships and work experience",
         },
         {
-          label: "🔮 Alibaba Qwen 2.5",
+          label: "🎓 Education & GTU '28",
           actionType: "send_message",
-          payload: "Tell me about Alibaba Qwen 2.5-Coder and QwQ",
+          payload: "What is his degree and education at GTU?",
         },
         {
-          label: "🟢 OpenAI ChatGPT & o1/o3",
+          label: "🏆 Verified Certifications",
           actionType: "send_message",
-          payload: "How do OpenAI o1 and o3 reasoning models work?",
+          payload: "What certifications does he hold?",
         },
         {
-          label: "🚀 Shahad's AI Projects",
+          label: "📞 Contact & Hire",
           actionType: "send_message",
-          payload: "What are Shahad's top AI projects?",
+          payload: "How can I contact or hire Shahad?",
         },
       ],
     },
@@ -260,7 +223,7 @@ export function PortfolioChatbot() {
       scrollToBottom();
       setTimeout(() => inputRef.current?.focus(), 150);
     }
-  }, [isOpen, messages, isTyping, activeModelMode]);
+  }, [isOpen, messages, isTyping]);
 
   // Speech synthesis reader
   const handleSpeak = (msgId: string, text: string) => {
@@ -339,7 +302,7 @@ export function PortfolioChatbot() {
 
       setMessages((prev) => [...prev, botMsg]);
       setIsTyping(false);
-    }, 400);
+    }, 350);
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -357,44 +320,16 @@ export function PortfolioChatbot() {
       {
         id: `welcome-${Date.now()}`,
         sender: "bot",
-        text: `Chat cleared! ✨ Ask me anything about Google Gemini, Meta LLaMA, Alibaba Qwen, OpenAI ChatGPT, or Shahad's portfolio!`,
-        thoughtProcess: "Context buffer flushed. Ready for new technical queries.",
+        text: `Chat cleared! ✨ Ask me anything about Shahad's projects, skills, education, internships, certifications, or contact info.`,
+        thoughtProcess: "Context buffer flushed. Ready for new queries.",
         timestamp: "Just now",
-        quickActions: MODEL_PROMPT_SUGGESTIONS[activeModelMode].slice(0, 4).map((prompt) => ({
+        quickActions: SUGGESTED_PROMPTS.slice(0, 4).map((prompt) => ({
           label: prompt,
           actionType: "send_message",
           payload: prompt,
         })),
       },
     ]);
-  };
-
-  const handleModelModeSelect = (mode: ModelFilterMode) => {
-    setActiveModelMode(mode);
-    aiInferenceEngine.setModelFocus(mode);
-
-    const modeNames: Record<ModelFilterMode, string> = {
-      all: "Unified Portfolio & Multi-Model AI",
-      gemini: "Google Gemini 2.0 & DeepMind",
-      llama: "Meta LLaMA 3.3 & Open Weights",
-      qwen: "Alibaba Qwen 2.5-Coder & QwQ",
-      chatgpt: "OpenAI ChatGPT & o1/o3 Reasoning",
-    };
-
-    const sysNotice: ChatMessage = {
-      id: `mode-switch-${Date.now()}`,
-      sender: "bot",
-      text: `🔄 Switched active focus to **${modeNames[mode]}**! Try one of the suggested prompts below:`,
-      thoughtProcess: `Configured system prompt and domain focus weighting to: ${mode.toUpperCase()}.`,
-      timestamp: "Just now",
-      quickActions: MODEL_PROMPT_SUGGESTIONS[mode].slice(0, 4).map((prompt) => ({
-        label: prompt,
-        actionType: "send_message",
-        payload: prompt,
-      })),
-    };
-
-    setMessages((prev) => [...prev, sysNotice]);
   };
 
   return (
@@ -428,7 +363,7 @@ export function PortfolioChatbot() {
             transition={{ duration: 0.22, ease: "easeOut" }}
             className="fixed right-4 bottom-24 z-50 flex h-[600px] w-[calc(100vw-2rem)] sm:w-[460px] flex-col overflow-hidden rounded-3xl border border-border bg-background/95 shadow-2xl backdrop-blur-2xl"
           >
-            {/* Header */}
+            {/* Header: Cleaned of external LLM badges */}
             <div className="flex items-center justify-between border-b border-border/80 bg-surface/90 px-4 py-3 backdrop-blur-md">
               <div className="flex items-center gap-2.5">
                 <div className="relative flex size-9 items-center justify-center rounded-xl border border-primary/40 bg-primary/10 text-primary-bright shadow-[0_0_12px_var(--glow)]">
@@ -438,11 +373,11 @@ export function PortfolioChatbot() {
                 <div>
                   <h3 className="font-display text-sm font-bold text-foreground flex items-center gap-1.5">
                     Shahad AI
-                    <span className="rounded-md border border-primary/30 bg-primary/10 px-1.5 py-0.2 font-mono text-[9px] text-primary-bright font-semibold">
-                      Sr. AI Engineer Fine-Tuned
+                    <span className="rounded-md border border-primary/30 bg-primary/10 px-1.5 py-0.5 font-mono text-[9px] text-primary-bright font-semibold">
+                      Portfolio Intelligence
                     </span>
                   </h3>
-                  <p className="font-mono text-[10px] text-emerald-400">● Online · Gemini · LLaMA · Qwen · ChatGPT</p>
+                  <p className="font-mono text-[10px] text-emerald-400">● Online · Verified Knowledge Base</p>
                 </div>
               </div>
 
@@ -468,68 +403,6 @@ export function PortfolioChatbot() {
               </div>
             </div>
 
-            {/* Interactive Model Selector Pill Bar */}
-            <div className="flex items-center gap-1.5 overflow-x-auto border-b border-border/60 bg-surface/60 px-3 py-2 text-[11px] scrollbar-none">
-              <span className="font-mono text-[10px] uppercase text-muted-foreground shrink-0 font-medium">
-                Focus:
-              </span>
-              <button
-                type="button"
-                onClick={() => handleModelModeSelect("all")}
-                className={`shrink-0 rounded-full px-2.5 py-0.5 font-medium transition-all ${
-                  activeModelMode === "all"
-                    ? "bg-primary text-primary-foreground shadow-xs font-semibold"
-                    : "border border-border/80 bg-surface text-muted-foreground hover:text-foreground hover:border-primary/40"
-                }`}
-              >
-                🤖 All
-              </button>
-              <button
-                type="button"
-                onClick={() => handleModelModeSelect("gemini")}
-                className={`shrink-0 rounded-full px-2.5 py-0.5 font-medium transition-all ${
-                  activeModelMode === "gemini"
-                    ? "bg-blue-500 text-white shadow-xs font-semibold"
-                    : "border border-border/80 bg-surface text-muted-foreground hover:text-foreground hover:border-blue-500/40"
-                }`}
-              >
-                ✨ Gemini 2.0
-              </button>
-              <button
-                type="button"
-                onClick={() => handleModelModeSelect("llama")}
-                className={`shrink-0 rounded-full px-2.5 py-0.5 font-medium transition-all ${
-                  activeModelMode === "llama"
-                    ? "bg-indigo-500 text-white shadow-xs font-semibold"
-                    : "border border-border/80 bg-surface text-muted-foreground hover:text-foreground hover:border-indigo-500/40"
-                }`}
-              >
-                🦙 LLaMA 3.3
-              </button>
-              <button
-                type="button"
-                onClick={() => handleModelModeSelect("qwen")}
-                className={`shrink-0 rounded-full px-2.5 py-0.5 font-medium transition-all ${
-                  activeModelMode === "qwen"
-                    ? "bg-purple-500 text-white shadow-xs font-semibold"
-                    : "border border-border/80 bg-surface text-muted-foreground hover:text-foreground hover:border-purple-500/40"
-                }`}
-              >
-                🔮 Qwen 2.5
-              </button>
-              <button
-                type="button"
-                onClick={() => handleModelModeSelect("chatgpt")}
-                className={`shrink-0 rounded-full px-2.5 py-0.5 font-medium transition-all ${
-                  activeModelMode === "chatgpt"
-                    ? "bg-emerald-600 text-white shadow-xs font-semibold"
-                    : "border border-border/80 bg-surface text-muted-foreground hover:text-foreground hover:border-emerald-500/40"
-                }`}
-              >
-                🟢 ChatGPT
-              </button>
-            </div>
-
             {/* Message Feed */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
               {messages.map((msg) => (
@@ -553,11 +426,11 @@ export function PortfolioChatbot() {
                             onClick={() =>
                               setExpandedThoughtId((prev) => (prev === msg.id ? null : msg.id))
                             }
-                            className="flex w-full items-center justify-between font-mono text-[10px] text-primary transition-colors hover:text-primary-bright"
+                            className="flex w-full items-center justify-between font-mono font-medium text-primary-bright/80 hover:text-primary-bright"
                           >
-                            <span className="flex items-center gap-1 font-semibold">
-                              <Sparkles className="size-3" />
-                              Thought Process / Reasoning Trace
+                            <span className="flex items-center gap-1">
+                              <Sparkles className="size-3 text-primary" />
+                              Reasoning Engine
                             </span>
                             {expandedThoughtId === msg.id ? (
                               <ChevronUp className="size-3" />
@@ -565,96 +438,83 @@ export function PortfolioChatbot() {
                               <ChevronDown className="size-3" />
                             )}
                           </button>
+
                           {expandedThoughtId === msg.id && (
-                            <p className="mt-1.5 font-mono text-[10px] leading-relaxed text-foreground/80 border-t border-primary/10 pt-1.5">
+                            <p className="mt-1.5 font-mono text-[10px] leading-relaxed text-muted-foreground/90 border-t border-border/40 pt-1.5">
                               {msg.thoughtProcess}
                             </p>
                           )}
                         </div>
                       ) : null}
 
-                      {/* Main Message Bubble */}
+                      {/* Message Bubble */}
                       <div
-                        className={`rounded-2xl px-4 py-3 leading-relaxed ${
+                        className={`rounded-2xl px-4 py-2.5 shadow-sm ${
                           msg.sender === "user"
-                            ? "bg-primary text-primary-foreground font-medium rounded-tr-xs shadow-md"
-                            : "border border-border bg-surface text-foreground rounded-tl-xs shadow-xs"
+                            ? "bg-primary text-primary-foreground font-medium rounded-br-xs"
+                            : "border border-border/80 bg-surface/90 text-foreground rounded-bl-xs"
                         }`}
                       >
                         <FormattedMessageText text={msg.text} />
                       </div>
 
-                      {/* Bot Message Tool Bar (Speech Reader & Copy) */}
-                      {msg.sender === "bot" ? (
-                        <div className="flex items-center gap-2 pl-1 text-[10px] text-muted-foreground">
+                      {/* Contextual Quick Actions (Bot only) */}
+                      {msg.sender === "bot" && msg.quickActions && msg.quickActions.length > 0 && (
+                        <div className="mt-1 flex flex-wrap gap-1.5">
+                          {msg.quickActions.map((action, actIdx) => (
+                            <button
+                              key={actIdx}
+                              type="button"
+                              onClick={() => handleActionClick(action)}
+                              className="inline-flex items-center gap-1 rounded-lg border border-primary/30 bg-primary/10 px-2.5 py-1 font-mono text-[10px] font-semibold text-primary-bright transition-all hover:bg-primary hover:text-primary-foreground active:scale-95 shadow-xs"
+                            >
+                              <span>{action.label}</span>
+                              <ArrowUpRight className="size-2.5" />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Bottom Meta row with timestamp & speech reader */}
+                      <div className="flex items-center justify-between px-1 text-[10px] text-muted-foreground font-mono">
+                        <span>{msg.timestamp}</span>
+
+                        {msg.sender === "bot" && (
                           <button
                             type="button"
                             onClick={() => handleSpeak(msg.id, msg.text)}
-                            title={speakingMsgId === msg.id ? "Stop voice" : "Read response aloud"}
-                            className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 transition-colors hover:bg-surface hover:text-foreground"
+                            title={speakingMsgId === msg.id ? "Stop Speaking" : "Read Aloud"}
+                            className="flex items-center gap-1 hover:text-primary-bright transition-colors"
                           >
                             {speakingMsgId === msg.id ? (
                               <>
-                                <VolumeX className="size-3 text-red-400" />
-                                <span className="text-red-400">Stop Voice</span>
+                                <VolumeX className="size-3 text-primary-bright animate-pulse" />
+                                <span className="text-[9px] text-primary-bright">Stop</span>
                               </>
                             ) : (
                               <>
                                 <Volume2 className="size-3" />
-                                <span>Voice Reader</span>
+                                <span className="text-[9px]">Listen</span>
                               </>
                             )}
                           </button>
-
-                          <button
-                            type="button"
-                            onClick={() => navigator.clipboard.writeText(msg.text)}
-                            title="Copy response"
-                            className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 transition-colors hover:bg-surface hover:text-foreground"
-                          >
-                            <Copy className="size-3" />
-                            <span>Copy Text</span>
-                          </button>
-                        </div>
-                      ) : null}
+                        )}
+                      </div>
                     </div>
-
-                    {msg.sender === "user" ? (
-                      <span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-border bg-surface text-foreground mt-0.5">
-                        <User className="size-3.5" />
-                      </span>
-                    ) : null}
                   </div>
-
-                  {/* Dynamic Action Buttons for Bot Replies */}
-                  {msg.quickActions && msg.quickActions.length > 0 ? (
-                    <div className="mt-2.5 flex flex-wrap gap-1.5 pl-8">
-                      {msg.quickActions.map((action, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => handleActionClick(action)}
-                          className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-medium text-foreground transition-all hover:border-primary/50 hover:bg-surface-2 hover:text-primary-bright active:scale-95"
-                        >
-                          {action.label}
-                          <ArrowUpRight className="size-3 text-muted-foreground" />
-                        </button>
-                      ))}
-                    </div>
-                  ) : null}
                 </div>
               ))}
 
-              {/* Typing Indicator */}
               {isTyping && (
-                <div className="flex items-center gap-2 pl-1">
+                <div className="flex items-center gap-2 text-muted-foreground">
                   <span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary-bright">
                     <Bot className="size-3.5" />
                   </span>
-                  <div className="flex items-center gap-1 rounded-2xl border border-border bg-surface px-3.5 py-2.5">
-                    <span className="size-1.5 animate-bounce rounded-full bg-primary" style={{ animationDelay: "0ms" }} />
-                    <span className="size-1.5 animate-bounce rounded-full bg-primary" style={{ animationDelay: "150ms" }} />
-                    <span className="size-1.5 animate-bounce rounded-full bg-primary" style={{ animationDelay: "300ms" }} />
+                  <div className="flex items-center gap-1 rounded-xl border border-border bg-surface px-3 py-2">
+                    <span className="size-1.5 animate-bounce rounded-full bg-primary [animation-delay:-0.3s]" />
+                    <span className="size-1.5 animate-bounce rounded-full bg-primary [animation-delay:-0.15s]" />
+                    <span className="size-1.5 animate-bounce rounded-full bg-primary" />
+                    <span className="ml-2 font-mono text-[10px] text-primary-bright">Thinking...</span>
                   </div>
                 </div>
               )}
@@ -670,7 +530,7 @@ export function PortfolioChatbot() {
                   Suggested questions:
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {MODEL_PROMPT_SUGGESTIONS[activeModelMode].slice(0, 4).map((prompt) => (
+                  {SUGGESTED_PROMPTS.slice(0, 4).map((prompt) => (
                     <button
                       key={prompt}
                       type="button"
@@ -694,7 +554,7 @@ export function PortfolioChatbot() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about Gemini, LLaMA, Qwen, ChatGPT, or Shahad..."
+                placeholder="Ask anything about Shahad's projects, skills, experience..."
                 className="flex-1 rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground/60 transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               />
               <button
