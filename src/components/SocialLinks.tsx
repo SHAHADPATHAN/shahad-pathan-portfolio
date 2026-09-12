@@ -7,14 +7,16 @@ export function SocialLinks({ className }: { className?: string }) {
       {socialLinks.map((link) => {
         const href = resolveHref(link);
         const Icon = link.icon;
+        const isExternalWeb = link.href.startsWith("http://") || link.href.startsWith("https://");
         return (
           <li key={link.id}>
             {href ? (
               <a
                 href={href}
-                target={link.id === "email" ? undefined : "_blank"}
-                rel="noreferrer noopener"
+                target={isExternalWeb ? "_blank" : undefined}
+                rel={isExternalWeb ? "noreferrer noopener" : undefined}
                 aria-label={link.label}
+                title={link.label}
                 className="flex size-10 items-center justify-center rounded-lg border border-border bg-surface text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
               >
                 <Icon className="size-[18px]" aria-hidden="true" />

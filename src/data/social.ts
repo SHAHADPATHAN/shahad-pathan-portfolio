@@ -34,8 +34,8 @@ export const socialLinks: SocialLink[] = [
   },
   {
     id: "phone",
-    label: "WhatsApp",
-    href: "https://wa.me/919913031752",
+    label: "Phone Call",
+    href: "tel:+919913031752",
     icon: Phone,
   },
 ];

@@ -70,8 +70,9 @@ export class SeniorAIInferenceEngine {
         confidence: 0.99,
         thoughtProcess:
           "Reasoning Engine: [Intent: Direct Communication Details] → Retrieving verified phone number (+919913031752), direct WhatsApp URL (wa.me/919913031752), official email, and location.",
-        text: `📱 **Connect Directly with Shahad Pathan:**\n\n• **WhatsApp Direct Chat**: [wa.me/919913031752](${profile.whatsapp})\n• **Mobile / Phone**: [${profile.phone}](${profile.whatsapp})\n• **Email**: [${profile.email}](mailto:${profile.email})\n• **LinkedIn**: [linkedin.com/in/shahad-pathan](https://www.linkedin.com/in/shahad-pathan/)\n• **GitHub**: [github.com/SHAHADPATHAN](https://github.com/SHAHADPATHAN)\n• **Location**: ${profile.location}\n\n⚡ **Availability**: Currently **Open for Internships & Software Engineering roles** (Remote & On-site).`,
+        text: `📱 **Connect Directly with Shahad Pathan:**\n\n• **Direct Phone Call**: [${profile.phone}](tel:${profile.phone})\n• **WhatsApp Direct Chat**: [wa.me/919913031752](${profile.whatsapp})\n• **Email**: [${profile.email}](mailto:${profile.email})\n• **LinkedIn**: [linkedin.com/in/shahad-pathan](https://www.linkedin.com/in/shahad-pathan/)\n• **GitHub**: [github.com/SHAHADPATHAN](https://github.com/SHAHADPATHAN)\n• **Location**: ${profile.location}\n\n⚡ **Availability**: Currently **Open for Internships & Software Engineering roles** (Remote & On-site).`,
         quickActions: [
+          { label: "📞 Direct Call", actionType: "open_url", payload: `tel:${profile.phone}` },
           { label: "💬 Chat on WhatsApp", actionType: "open_url", payload: profile.whatsapp },
           { label: "📧 Copy Email", actionType: "copy_email" },
           { label: "📄 Download Resume", actionType: "download_resume" },
