@@ -24,6 +24,7 @@ import {
   SlidersHorizontal,
   FileCheck2,
   ArrowRight,
+  Files,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import {
@@ -53,14 +54,20 @@ function CertificateCard({
   copiedId,
 }: {
   item: AwardItem;
-  onView: (item: AwardItem) => void;
-  onVerify: (item: AwardItem) => void;
+  onView: (item: AwardItem, docIndex?: number) => void;
+  onVerify: (item: AwardItem, docIndex?: number) => void;
   onCopyId: (id: string) => void;
   copiedId: string | null;
 }) {
+  const [activeDocIndex, setActiveDocIndex] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
   const glareRef = useRef<HTMLDivElement>(null);
   const rafId = useRef<number | null>(null);
+
+  const activeDoc = item.documents ? item.documents[activeDocIndex] : undefined;
+  const displayImage = activeDoc?.image ?? item.image;
+  const displayCredId = activeDoc?.credentialId ?? item.credentialId;
+  const isCopied = displayCredId ? copiedId === displayCredId : false;
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -97,7 +104,6 @@ function CertificateCard({
   };
 
   const Icon = categoryIconMap[item.category] ?? Award;
-  const isCopied = copiedId === item.credentialId;
 
   return (
     <div
@@ -122,8 +128,9 @@ function CertificateCard({
       {/* Thumbnail Container */}
       <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-border/60 bg-black/40">
         <img
-          src={item.image}
-          alt={`${item.title} certificate`}
+          key={displayImage}
+          src={displayImage}
+          alt={`${item.title}${activeDoc ? ` - ${activeDoc.title}` : ""} certificate`}
           loading="lazy"
           decoding="async"
           className="size-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
@@ -138,6 +145,12 @@ function CertificateCard({
             <Icon className="size-3" aria-hidden="true" />
             <span>{item.badgeText ?? item.category}</span>
           </span>
+          {item.documents && item.documents.length > 1 && (
+            <span className="flex items-center gap-1 rounded-full border border-primary/40 bg-background/90 px-2 py-0.5 font-mono text-[10px] font-semibold text-primary-bright backdrop-blur-md shadow-sm">
+              <Files className="size-3 text-primary-bright" />
+              <span>{item.documents.length} Certs</span>
+            </span>
+          )}
         </div>
 
         <div className="absolute top-3 right-3 z-10">
@@ -147,11 +160,40 @@ function CertificateCard({
           </span>
         </div>
 
+        {/* In-Card Mini Document Switcher Pills */}
+        {item.documents && item.documents.length > 1 && (
+          <div className="absolute bottom-2.5 inset-x-3 z-20 flex items-center justify-between">
+            <span className="font-mono text-[10px] font-semibold text-white/90 bg-black/75 px-2 py-0.5 rounded-md backdrop-blur-md border border-white/15 truncate max-w-[130px] shadow-sm">
+              {activeDoc?.badge ?? `Doc ${activeDocIndex + 1}`}
+            </span>
+            <div className="flex items-center gap-1 rounded-lg bg-black/85 p-0.5 backdrop-blur-md border border-white/20 shadow-md">
+              {item.documents.map((doc, idx) => (
+                <button
+                  key={doc.id}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveDocIndex(idx);
+                  }}
+                  className={cn(
+                    "rounded-md px-2 py-0.5 font-mono text-[10px] font-medium transition-all",
+                    activeDocIndex === idx
+                      ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                      : "text-white/70 hover:text-white hover:bg-white/15"
+                  )}
+                >
+                  {doc.badge ?? `${idx + 1}`}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Quick View Button on Hover */}
         <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 backdrop-blur-[2px] transition-opacity duration-200 group-hover:opacity-100 bg-background/35">
           <button
             type="button"
-            onClick={() => onView(item)}
+            onClick={() => onView(item, activeDocIndex)}
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-lg transition-transform duration-150 hover:scale-105 hover:bg-primary-bright"
           >
             <Eye className="size-4" aria-hidden="true" />
@@ -167,7 +209,7 @@ function CertificateCard({
             {item.organization}
           </p>
           <span className="shrink-0 font-mono text-[11px] text-muted-foreground">
-            {item.issueDate}
+            {activeDoc?.issueDate ?? item.issueDate}
           </span>
         </div>
 
@@ -176,7 +218,7 @@ function CertificateCard({
         </h3>
 
         <p className="mt-3 flex-1 text-xs leading-relaxed text-muted-foreground sm:text-sm line-clamp-3">
-          {item.description}
+          {activeDoc?.description ?? item.description}
         </p>
 
         {/* Skills */}
@@ -200,10 +242,10 @@ function CertificateCard({
 
         {/* Bottom Actions */}
         <div className="mt-5 flex items-center justify-between gap-2 border-t border-border/70 pt-4">
-          {item.credentialId ? (
+          {displayCredId ? (
             <button
               type="button"
-              onClick={() => item.credentialId && onCopyId(item.credentialId)}
+              onClick={() => displayCredId && onCopyId(displayCredId)}
               title="Click to copy Credential ID"
               className="group/id inline-flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground transition-colors hover:text-foreground"
             >
@@ -213,7 +255,7 @@ function CertificateCard({
                 <Copy className="size-3.5 transition-transform group-hover/id:scale-110 text-muted-foreground/80" />
               )}
               <span className="max-w-[110px] truncate text-[10px] sm:max-w-[130px]">
-                {isCopied ? "ID Copied!" : item.credentialId}
+                {isCopied ? "ID Copied!" : displayCredId}
               </span>
             </button>
           ) : (
@@ -225,7 +267,7 @@ function CertificateCard({
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => onView(item)}
+              onClick={() => onView(item, activeDocIndex)}
               className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary-bright"
             >
               <Eye className="size-3.5" aria-hidden="true" />
@@ -234,7 +276,7 @@ function CertificateCard({
 
             <button
               type="button"
-              onClick={() => onVerify(item)}
+              onClick={() => onVerify(item, activeDocIndex)}
               className="inline-flex items-center gap-1 rounded-lg bg-primary/15 border border-primary/30 px-2.5 py-1.5 text-xs font-medium text-primary-bright transition-all hover:bg-primary hover:text-primary-foreground hover:shadow-sm"
             >
               <span>Verify</span>
@@ -252,8 +294,10 @@ export function Awards() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"carousel" | "grid">("carousel");
   const [selectedAward, setSelectedAward] = useState<AwardItem | null>(null);
+  const [selectedDocIndex, setSelectedDocIndex] = useState<number>(0);
   const [modalTab, setModalTab] = useState<"image" | "details">("image");
   const [verificationAward, setVerificationAward] = useState<AwardItem | null>(null);
+  const [verificationDocIndex, setVerificationDocIndex] = useState<number>(0);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -290,9 +334,14 @@ export function Awards() {
   };
 
   // Open branded full-resolution window with Shahad Pathan's SP logo & verified badge
-  const openFullResolutionWindow = (item: AwardItem) => {
+  const openFullResolutionWindow = (item: AwardItem, docIndex = 0) => {
     const newWindow = window.open("", "_blank");
     if (!newWindow) return;
+
+    const doc = item.documents?.[docIndex];
+    const imageSrc = doc?.image ?? item.image;
+    const itemTitle = doc ? `${item.title} — ${doc.title}` : item.title;
+    const downloadName = doc ? `${item.id}-${doc.id}.jpg` : `${item.id}-certificate.jpg`;
 
     newWindow.document.write(`
       <!DOCTYPE html>
@@ -300,7 +349,7 @@ export function Awards() {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${item.title} — Shahad Pathan</title>
+        <title>${itemTitle} — Shahad Pathan</title>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="icon" href="/favicon.png" type="image/png">
         <link rel="icon" href="/favicon.ico">
@@ -405,16 +454,16 @@ export function Awards() {
           <div class="brand">
             <span class="sp-badge">SP</span>
             <div class="title-area">
-              <div class="title">${item.title}</div>
+              <div class="title">${itemTitle}</div>
               <div class="org">${item.organization} · Verified Credential</div>
             </div>
           </div>
           <div class="actions">
-            <a class="btn" href="${item.image}" download="${item.id}-certificate.jpg">Download Certificate</a>
+            <a class="btn" href="${imageSrc}" download="${downloadName}">Download Certificate</a>
           </div>
         </header>
         <div class="main-view">
-          <img src="${item.image}" alt="${item.title}" />
+          <img src="${imageSrc}" alt="${itemTitle}" />
         </div>
       </body>
       </html>
@@ -543,13 +592,15 @@ export function Awards() {
   };
 
   // Open verification dialog or direct link
-  const handleVerify = (item: AwardItem) => {
+  const handleVerify = (item: AwardItem, docIndex = 0) => {
     setVerificationAward(item);
+    setVerificationDocIndex(docIndex);
   };
 
   // Open viewer modal
-  const handleView = (item: AwardItem) => {
+  const handleView = (item: AwardItem, docIndex = 0) => {
     setSelectedAward(item);
+    setSelectedDocIndex(docIndex);
     setZoomLevel(1);
     setModalTab("image");
   };
@@ -571,6 +622,7 @@ export function Awards() {
         const nextIdx = (currentIndex + 1) % filteredAwards.length;
         setSelectedAward(filteredAwards[nextIdx] ?? null);
       }
+      setSelectedDocIndex(0);
       setZoomLevel(1);
     },
     [selectedAward, filteredAwards],
@@ -598,6 +650,19 @@ export function Awards() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedAward, handleModalNavigate]);
+
+  const currentDoc = selectedAward?.documents ? selectedAward.documents[selectedDocIndex] : undefined;
+  const currentImage = currentDoc?.image ?? selectedAward?.image ?? "";
+  const currentTitle = currentDoc ? `${selectedAward?.title} (${currentDoc.title})` : (selectedAward?.title ?? "");
+  const currentCredentialId = currentDoc?.credentialId ?? selectedAward?.credentialId;
+  const currentIssueDate = currentDoc?.issueDate ?? selectedAward?.issueDate ?? "";
+  const currentDescription = currentDoc?.description ?? selectedAward?.description ?? "";
+
+  const currentVDoc = verificationAward?.documents ? verificationAward.documents[verificationDocIndex] : undefined;
+  const currentVTitle = currentVDoc ? `${verificationAward?.title} (${currentVDoc.title})` : (verificationAward?.title ?? "");
+  const currentVCredId = currentVDoc?.credentialId ?? verificationAward?.credentialId;
+  const currentVIssueDate = currentVDoc?.issueDate ?? verificationAward?.issueDate ?? "";
+  const currentVDescription = currentVDoc?.description ?? verificationAward?.description ?? "";
 
   return (
     <section
@@ -1009,7 +1074,7 @@ export function Awards() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => openFullResolutionWindow(selectedAward)}
+                    onClick={() => openFullResolutionWindow(selectedAward, selectedDocIndex)}
                     title="Open Branded Certificate Tab"
                     className="flex size-7 items-center justify-center rounded-lg text-white/80 transition-colors hover:bg-white/10 hover:text-white"
                   >
@@ -1017,12 +1082,37 @@ export function Awards() {
                   </button>
                 </div>
 
+                {/* Floating Multi-Document Switcher Bar inside Image Viewer */}
+                {selectedAward.documents && selectedAward.documents.length > 1 && (
+                  <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex items-center gap-1 rounded-xl border border-white/20 bg-black/75 p-1 backdrop-blur-md shadow-lg">
+                    {selectedAward.documents.map((doc, idx) => (
+                      <button
+                        key={doc.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedDocIndex(idx);
+                          setZoomLevel(1);
+                        }}
+                        className={cn(
+                          "flex items-center gap-1.5 rounded-lg px-2.5 py-1 font-mono text-[11px] transition-all",
+                          selectedDocIndex === idx
+                            ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                            : "text-white/70 hover:text-white hover:bg-white/10"
+                        )}
+                      >
+                        <Files className="size-3" />
+                        <span>{doc.badge ?? doc.title}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
                 {/* Certificate High-Res Image with Zoom Transform */}
                 <div className="flex size-full items-center justify-center overflow-auto p-2 sm:p-4">
                   <img
-                    key={selectedAward.id}
-                    src={selectedAward.image}
-                    alt={selectedAward.title}
+                    key={`${selectedAward.id}-${selectedDocIndex}`}
+                    src={currentImage}
+                    alt={currentTitle}
                     style={{
                       transform: `scale(${zoomLevel})`,
                       transition: "transform 0.15s ease-out",
@@ -1052,7 +1142,7 @@ export function Awards() {
                 {/* Mobile Bottom Quick Switch Action Bar */}
                 <div className="absolute bottom-3 inset-x-3 z-20 flex items-center justify-between gap-2 lg:hidden">
                   <span className="rounded-lg bg-black/75 px-2.5 py-1 font-mono text-[10px] text-white/90 backdrop-blur-md border border-white/10 truncate max-w-[55%]">
-                    {selectedAward.title}
+                    {currentTitle}
                   </span>
                   <button
                     type="button"
@@ -1116,6 +1206,51 @@ export function Awards() {
                     {selectedAward.organization}
                   </p>
 
+                  {/* Multi-Document Bundle Selector in Details */}
+                  {selectedAward.documents && selectedAward.documents.length > 1 && (
+                    <div className="mt-4 rounded-2xl border border-primary/30 bg-primary/5 p-3.5">
+                      <div className="flex items-center justify-between text-xs font-semibold text-primary-bright mb-2">
+                        <span className="flex items-center gap-1.5">
+                          <Files className="size-3.5 text-primary-bright" />
+                          <span>Course Credentials Bundle ({selectedAward.documents.length} Certs)</span>
+                        </span>
+                        <span className="font-mono text-[10px] text-muted-foreground">
+                          {selectedDocIndex + 1} of {selectedAward.documents.length}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        {selectedAward.documents.map((doc, idx) => (
+                          <button
+                            key={doc.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedDocIndex(idx);
+                              setZoomLevel(1);
+                            }}
+                            className={cn(
+                              "flex flex-col items-start rounded-xl border p-2.5 text-left transition-all",
+                              selectedDocIndex === idx
+                                ? "border-primary bg-primary/20 text-foreground shadow-xs ring-1 ring-primary/40"
+                                : "border-border bg-surface hover:border-primary/40 hover:bg-surface-2 text-muted-foreground"
+                            )}
+                          >
+                            <span className="font-mono text-[10px] font-semibold text-primary-bright">
+                              {doc.badge ?? `Document ${idx + 1}`}
+                            </span>
+                            <span className="mt-0.5 text-xs font-medium text-foreground line-clamp-1">
+                              {doc.title}
+                            </span>
+                            {doc.credentialId && (
+                              <span className="mt-1 font-mono text-[9px] text-muted-foreground truncate w-full">
+                                ID: {doc.credentialId}
+                              </span>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Metadata Spec Table */}
                   <dl className="mt-6 divide-y divide-border rounded-2xl border border-border bg-surface-2/60 p-4 text-xs">
                     <div className="flex items-center justify-between py-2">
@@ -1124,19 +1259,19 @@ export function Awards() {
                       </dt>
                       <dd className="flex items-center gap-2 font-mono font-semibold text-foreground">
                         <span className="max-w-[170px] truncate">
-                          {selectedAward.credentialId ?? "INSTITUTIONAL"}
+                          {currentCredentialId ?? "INSTITUTIONAL"}
                         </span>
-                        {selectedAward.credentialId && (
+                        {currentCredentialId && (
                           <button
                             type="button"
                             onClick={() =>
-                              selectedAward.credentialId &&
-                              handleCopyId(selectedAward.credentialId)
+                              currentCredentialId &&
+                              handleCopyId(currentCredentialId)
                             }
                             title="Copy ID"
                             className="text-muted-foreground hover:text-foreground"
                           >
-                            {copiedId === selectedAward.credentialId ? (
+                            {copiedId === currentCredentialId ? (
                               <Check className="size-3.5 text-emerald-400" />
                             ) : (
                               <Copy className="size-3.5" />
@@ -1160,7 +1295,7 @@ export function Awards() {
                         Issue Date
                       </dt>
                       <dd className="font-medium text-foreground">
-                        {selectedAward.issueDate}
+                        {currentIssueDate}
                       </dd>
                     </div>
 
@@ -1185,7 +1320,7 @@ export function Awards() {
 
                   {/* Description */}
                   <p className="mt-4 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                    {selectedAward.description}
+                    {currentDescription}
                   </p>
 
                   {/* Skills Tags */}
@@ -1223,12 +1358,12 @@ export function Awards() {
 
                   <div className="flex items-center gap-2">
                     <a
-                      href={selectedAward.image}
-                      download={`${selectedAward.id}-certificate.jpg`}
+                      href={currentImage}
+                      download={`${selectedAward.id}-${currentDoc?.id ?? "certificate"}.jpg`}
                       className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary-bright"
                     >
                       <Download className="size-3.5" />
-                      <span>Download Certificate</span>
+                      <span>Download {currentDoc?.badge ?? "Certificate"}</span>
                     </a>
 
                     <button
@@ -1292,12 +1427,34 @@ export function Awards() {
                 id="verify-dialog-title"
                 className="mt-4 font-display text-xl font-bold text-foreground sm:text-2xl"
               >
-                {verificationAward.title}
+                {currentVTitle}
               </h3>
 
               <p className="mt-1 font-mono text-sm text-primary-bright">
                 {verificationAward.organization}
               </p>
+
+              {/* Document Switcher in Verification Dialog */}
+              {verificationAward.documents && verificationAward.documents.length > 1 && (
+                <div className="mt-4 flex items-center gap-2 rounded-xl bg-surface/80 p-1 border border-border">
+                  {verificationAward.documents.map((doc, idx) => (
+                    <button
+                      key={doc.id}
+                      type="button"
+                      onClick={() => setVerificationDocIndex(idx)}
+                      className={cn(
+                        "flex flex-1 items-center justify-center gap-1.5 rounded-lg py-1.5 font-mono text-xs transition-all",
+                        verificationDocIndex === idx
+                          ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                          : "text-muted-foreground hover:text-foreground hover:bg-surface"
+                      )}
+                    >
+                      <Files className="size-3" />
+                      <span>{doc.badge ?? doc.title}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {/* Metadata Spec Sheet */}
               <dl className="mt-6 divide-y divide-border rounded-xl border border-border bg-surface/50 p-4 text-xs sm:text-sm">
@@ -1306,18 +1463,18 @@ export function Awards() {
                     Credential ID
                   </dt>
                   <dd className="flex items-center gap-2 font-mono font-semibold text-foreground">
-                    <span>{verificationAward.credentialId ?? "VERIFIED"}</span>
-                    {verificationAward.credentialId && (
+                    <span>{currentVCredId ?? "VERIFIED"}</span>
+                    {currentVCredId && (
                       <button
                         type="button"
                         onClick={() =>
-                          verificationAward.credentialId &&
-                          handleCopyId(verificationAward.credentialId)
+                          currentVCredId &&
+                          handleCopyId(currentVCredId)
                         }
                         title="Copy ID"
                         className="text-muted-foreground hover:text-foreground"
                       >
-                        {copiedId === verificationAward.credentialId ? (
+                        {copiedId === currentVCredId ? (
                           <Check className="size-3.5 text-emerald-400" />
                         ) : (
                           <Copy className="size-3.5" />
@@ -1336,7 +1493,7 @@ export function Awards() {
                   <dt className="font-mono text-[11px] uppercase text-muted-foreground">
                     Issue Date
                   </dt>
-                  <dd className="text-foreground">{verificationAward.issueDate}</dd>
+                  <dd className="text-foreground">{currentVIssueDate}</dd>
                 </div>
                 <div className="flex items-center justify-between py-2">
                   <dt className="font-mono text-[11px] uppercase text-muted-foreground">
@@ -1348,7 +1505,7 @@ export function Awards() {
 
               {/* Description */}
               <p className="mt-4 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                {verificationAward.description}
+                {currentVDescription}
               </p>
 
               {/* Actions */}
@@ -1369,8 +1526,9 @@ export function Awards() {
                   type="button"
                   onClick={() => {
                     const awardToView = verificationAward;
+                    const docIdx = verificationDocIndex;
                     setVerificationAward(null);
-                    setSelectedAward(awardToView);
+                    handleView(awardToView, docIdx);
                   }}
                   className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-3 text-sm font-medium text-foreground transition-colors hover:border-primary hover:text-primary-bright"
                 >

@@ -25,6 +25,16 @@ export const domainFilters = [
 
 export type DomainFilter = (typeof domainFilters)[number];
 
+export type CertificateDocument = {
+  id: string;
+  title: string;
+  badge?: string;
+  image: string;
+  credentialId?: string;
+  issueDate?: string;
+  description?: string;
+};
+
 export type AwardItem = {
   id: string;
   title: string;
@@ -40,6 +50,7 @@ export type AwardItem = {
   featured?: boolean;
   signatory?: string;
   badgeText?: string;
+  documents?: CertificateDocument[];
 };
 
 export const awards: AwardItem[] = [
@@ -147,20 +158,40 @@ export const awards: AwardItem[] = [
   },
   {
     id: "cisco-networking-basics",
-    title: "Networking Basics Course Completion",
+    title: "Networking Basics — Course Completion & Official Award",
     organization: "Cisco Networking Academy",
     issueDate: "August 01, 2026",
     category: "Certification",
     domain: "Cybersecurity",
     description:
-      "Student-level credential from Cisco Networking Academy verifying proficiency in network communication architectures, IPv4/IPv6 addressing, routing protocols, and troubleshooting.",
-    credentialId: "CISCO-NET-BASICS-2026",
+      "Dual Cisco Networking Academy credentials verifying student-level proficiency and official award recognition for completing the Networking Basics curriculum, covering network communication architectures, IPv4/IPv6 addressing, routing protocols, and troubleshooting.",
+    credentialId: "0f53cd57-6904-4b3a-96f1-88ac514351b9",
     verificationUrl: "https://www.credly.com/badges/78e55acc-dd92-41a0-bed5-d37d734b90ed",
     skills: ["Computer Networks", "IPv4 / IPv6", "Ethernet Protocols", "Router Configuration", "Network Security"],
     image: "/certificates/cisco-networking-basics.jpg",
     featured: false,
-    signatory: "Lynn Bloomer, Director Cisco Academy",
-    badgeText: "Cisco Verified",
+    signatory: "Lynn Bloomer, Director Cisco Networking Academy",
+    badgeText: "Dual Credential (2 Certs)",
+    documents: [
+      {
+        id: "cisco-course-completion",
+        title: "Certificate of Course Completion",
+        badge: "Course Completion",
+        image: "/certificates/cisco-networking-basics.jpg",
+        credentialId: "CISCO-NET-BASICS-2026",
+        issueDate: "Aug 01, 2026",
+        description: "Student level credential verifying comprehensive completion of the Networking Basics curriculum.",
+      },
+      {
+        id: "cisco-award-cert",
+        title: "Official Award Certificate",
+        badge: "Award Certificate",
+        image: "/certificates/cisco-networking-basics-award.jpg",
+        credentialId: "0f53cd57-6904-4b3a-96f1-88ac514351b9",
+        issueDate: "01 Aug 2026",
+        description: "Official certificate awarded through the Cisco Networking Academy program with registered Cert ID.",
+      },
+    ],
   },
   {
     id: "python-bootcamp-completion",
